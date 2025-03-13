@@ -1,0 +1,235 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+@import "tailwindcss" theme(static);
+@import "@nuxt/ui";
+
+@plugin "@tailwindcss/typography";
+
+:root {
+  --ui-radius: 0.5rem;
+}
+
+html {
+  overflow-y: scroll;
+  font-family: "Ubuntu";
+  scroll-behavior: smooth !important;
+}
+
+/* 设置滚动条的宽度 */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* 设置滚动条的轨道 */
+::-webkit-scrollbar-track {
+  background: oklch(0.22 0 0);
+}
+
+/* 设置滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+  background: oklch(0.25 0 0);
+  border-radius: 6px;
+}
+
+/* 设置滚动条滑块的悬停效果 */
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.269 0 0);
+}
+
+.eric svg {
+  width: 40px;
+  height: auto;
+}
+
+@media (prefers-reduced-motion) {
+  .eric path {
+    animation: none !important;
+    stroke-dasharray: unset !important;
+  }
+}
+
+@keyframes write {
+  0% {
+    stroke-dashoffset: 1000px;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 只在 .eric 类下的路径应用动画 */
+.eric path:nth-child(1) {
+  stroke-dasharray: 1000px;
+  stroke-dashoffset: 1000px;
+  animation: write 5s ease forwards;
+}
+
+.eric path:nth-child(2) {
+  stroke-dasharray: 1000px;
+  stroke-dashoffset: 1000px;
+  animation: write 5s ease forwards;
+  animation-delay: 1.5s;
+}
+
+.eric path:nth-child(3) {
+  stroke-dasharray: 1000px;
+  stroke-dashoffset: 1000px;
+  animation: write 5s ease forwards;
+  animation-delay: 2s;
+}
+
+.year {
+  font-family: "Inter";
+  -webkit-text-stroke: 0.03em var(--color-neutral-50);
+}
+
+/* 链接的基础样式 */
+.glow-link,
+.prose a {
+  position: relative; /* 使伪元素相对于链接定位 */
+  text-decoration: none; /* 去除默认下划线 */
+}
+
+/* 定义链接的::after伪元素 */
+.glow-link::after,
+.prose a::after {
+  content: ""; /* 伪元素内容为空 */
+  position: absolute; /* 绝对定位 */
+  bottom: -2px; /* 下划线位置，可根据需要调整 */
+  left: 50%; /* 初始位置在中间 */
+  width: 0; /* 初始宽度为0 */
+  height: 2px; /* 下划线高度 */
+  background-color: var(--color-violet-500); /* 下划线颜色 */
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out; /* 过渡效果 */
+}
+
+/* 鼠标悬停时的效果 */
+.glow-link:hover::after,
+.prose a:hover::after {
+  width: 100%; /* 下划线扩展至全宽 */
+  left: 0; /* 起始位置调整为左侧 */
+  box-shadow: 0 0 8px var(--color-violet-500); /* 发光效果 */
+}
+
+textarea {
+  resize: none;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(113, 113, 122, 0),
+    rgba(113, 113, 122, 0.45),
+    rgba(113, 113, 122, 0)
+  );
+}
+
+/* TOC容器样式 */
+.toc {
+  width: 260px;
+  margin: 5px auto;
+  padding: 5px;
+  position: fixed;
+  top: 10%;
+  left: 1.5%;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* TOC标题样式 */
+.toc h2 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* 列表项样式 */
+.toc ol {
+  list-style: none;
+  padding: 0;
+}
+
+.toc li {
+  margin: 2px 0;
+}
+
+/* 链接样式 */
+.toc a {
+  color: var(--color-neutral-500);
+  text-decoration: none;
+  font-size: 12px;
+  position: relative;
+  display: inline-block;
+  padding: 3px 0;
+  transition: color 0.3s ease;
+}
+
+/* 鼠标悬停效果 */
+.toc a:hover {
+  color: var(--color-violet-500);
+}
+
+/* 动态下划线效果 */
+.toc a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 0;
+  height: 2px;
+  background: var(--color-violet-500);
+  transition: width 0.3s ease;
+}
+
+.toc a:hover::after {
+  width: 100%;
+}
+
+/* 列表项出现动画 */
+.toc li {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.5s forwards;
+}
+
+/* 列表项动画延迟 */
+.toc li:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.toc li:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.toc li:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.toc li:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.toc li:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.toc li:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.toc li:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.toc li:nth-child(8) {
+  animation-delay: 0.8s;
+}
+
+/* 列表项动画关键帧 */
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
