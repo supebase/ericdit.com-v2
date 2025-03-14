@@ -27,7 +27,7 @@
           <template #default>
             <MDC
               :value="post.content"
-              class="prose prose-img:rounded-lg prose-pre:rounded-lg prose-a:text-primary-500 prose-h3:prose-a:text-neutral-300 dark:prose-invert" />
+              class="prose prose-img:rounded-lg prose-pre:rounded-lg prose-code:text-[0.8rem] prose-code:leading-[1.3rem] prose-a:text-primary-500 prose-h3:prose-a:text-neutral-300 prose-h4:prose-a:text-neutral-300 dark:prose-invert" />
           </template>
           <template #fallback>
             <div

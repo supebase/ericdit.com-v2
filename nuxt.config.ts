@@ -85,7 +85,17 @@ export default defineNuxtConfig({
         default: "github-dark",
       },
     },
+    components: {
+      prose: true,
+    },
   },
+
+  components: [
+    {
+      global: true,
+      path: "./components",
+    },
+  ],
 
   colorMode: {
     preference: "dark",

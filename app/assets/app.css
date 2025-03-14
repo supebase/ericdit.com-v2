@@ -187,7 +187,7 @@ hr {
   margin: 5px auto;
   padding: 5px 0;
   position: fixed;
-  top: 10%;
+  top: 12%;
   left: calc(var(--spacing) * 10);
   -webkit-user-select: none;
   user-select: none;
@@ -204,10 +204,11 @@ hr {
 .toc ol {
   list-style: none;
   padding: 0;
+  margin: 4px 0;
 }
 
 .toc li {
-  margin: 2px 0;
+  margin: 0px 0;
 }
 
 /* 链接样式 */
@@ -217,7 +218,7 @@ hr {
   font-size: 12px;
   position: relative;
   display: inline-block;
-  padding: 3px 0;
+  padding: 0px 0;
   transition: color 0.3s ease;
 }
 
