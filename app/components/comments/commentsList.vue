@@ -10,7 +10,9 @@
       v-else
       class="space-y-6 pt-2">
       <div class="flex justify-between items-center">
-        <CommentsCount :postId="props.postId" />
+        <CommentsCount
+          :postId="props.postId"
+          :isComment="true" />
         <div
           v-if="comments?.length"
           class="text-sm text-neutral-600 underline underline-offset-4 decoration-dashed select-none">
@@ -62,7 +64,9 @@
       </div>
 
       <div v-else>
-        <div class="flex flex-col justify-center items-center my-6 space-y-4 select-none" v-if="user">
+        <div
+          class="flex flex-col justify-center items-center my-6 space-y-4 select-none"
+          v-if="user">
           <UIcon
             name="hugeicons:comment-02"
             class="w-10 h-10 text-neutral-800" />
@@ -75,7 +79,7 @@
 
 <script setup lang="ts">
 const { fetchComments, subscribeToComments, subscribeToUsers } = useComments();
-const props = defineProps<{ postId: string, user: boolean }>();
+const props = defineProps<{ postId: string; user: boolean }>();
 
 const showHiddenComments = ref(false);
 

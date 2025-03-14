@@ -1,11 +1,11 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      primary: "violet",
+      primary: "emerald",
       neutral: "zinc",
     },
     icons: {
-      loading: "svg-spinners:90-ring-with-bg",
+      loading: "svg-spinners:ring-resize",
     },
     button: {
       compoundVariants: [

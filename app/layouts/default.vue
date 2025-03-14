@@ -12,7 +12,7 @@
     v-else>
     <UAlert
       title="提示信息"
-      description="本平台暂不支持通过移动设备，建议您使用桌面端浏览器进行访问。"
+      description="本网站暂不支持移动设备，建议您使用桌面端浏览器进行访问。"
       icon="hugeicons:alert-02"
       color="error" />
   </div>

@@ -89,6 +89,55 @@ html {
   -webkit-text-stroke: 0.03em var(--color-neutral-50);
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 定义圆形路径的动画 */
+@keyframes drawCircle {
+  from {
+    stroke-dashoffset: 64;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 定义对勾路径的动画 */
+@keyframes drawCheck {
+  from {
+    stroke-dashoffset: 6;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 应用圆形路径的动画 */
+.circle {
+  animation: drawCircle 0.8s forwards;
+}
+
+/* 应用对勾路径的动画，延迟0.9s开始 */
+.check {
+  animation: drawCheck 0.5s 0.9s forwards;
+}
+
 /* 链接的基础样式 */
 .glow-link,
 .prose a {
@@ -105,7 +154,7 @@ html {
   left: 50%; /* 初始位置在中间 */
   width: 0; /* 初始宽度为0 */
   height: 2px; /* 下划线高度 */
-  background-color: var(--color-violet-500); /* 下划线颜色 */
+  background-color: var(--color-emerald-500); /* 下划线颜色 */
   transition: width 0.3s ease-in-out, left 0.3s ease-in-out; /* 过渡效果 */
 }
 
@@ -114,7 +163,7 @@ html {
 .prose a:hover::after {
   width: 100%; /* 下划线扩展至全宽 */
   left: 0; /* 起始位置调整为左侧 */
-  box-shadow: 0 0 8px var(--color-violet-500); /* 发光效果 */
+  box-shadow: 0 0 8px var(--color-emerald-500); /* 发光效果 */
 }
 
 textarea {
@@ -174,7 +223,7 @@ hr {
 
 /* 鼠标悬停效果 */
 .toc a:hover {
-  color: var(--color-violet-500);
+  color: var(--color-emerald-500);
 }
 
 /* 动态下划线效果 */
@@ -185,7 +234,7 @@ hr {
   bottom: 2px;
   width: 0;
   height: 2px;
-  background: var(--color-violet-500);
+  background: var(--color-emerald-500);
   transition: width 0.3s ease;
 }
 

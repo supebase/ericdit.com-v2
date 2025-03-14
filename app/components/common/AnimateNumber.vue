@@ -1,7 +1,8 @@
 <template>
   <div
     ref="counter"
-    class="counter select-none" :class="type === 'post' ? 'text-center !text-xl' : ''">
+    class="counter select-none"
+    :class="type === 'post' ? 'text-center !text-xl' : ''">
     <div class="number">
       {{ props.count }}
     </div>
@@ -62,6 +63,7 @@ defineExpose({
   width: 100%;
 }
 .number {
+  font-family: "Inter";
   display: block;
   position: absolute;
   width: 100%;

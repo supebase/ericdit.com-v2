@@ -28,8 +28,8 @@
               <div>
                 <ULink
                   :to="`/posts/${post.id}`"
-                  class="text-lg font-semibold glow-link select-none">
-                  <div class="">{{ post.title }}</div>
+                  class="text-lg font-semibold select-none">
+                  <div class="duration-500 ease-in-out hover:scale-105 glow-link">{{ post.title }}</div>
                 </ULink>
                 <CommentsCount
                   :postId="post.id"

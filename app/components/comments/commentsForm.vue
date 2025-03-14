@@ -85,15 +85,15 @@ const postComment = async () => {
     );
     comment.value = "";
     toast.add({
-      title: "发表评论成功",
-      description: "您的评论已提交。",
+      title: "评论成功",
+      description: "您的评论已发表成功，非常感谢。",
       icon: "hugeicons:checkmark-circle-02",
       color: "success",
     });
   } catch (error) {
     toast.add({
-      title: "发表评论失败",
-      description: "请稍后再试。",
+      title: "评论信息",
+      description: "发生错误，请稍后再试。",
       icon: "hugeicons:alert-02",
       color: "error",
     });

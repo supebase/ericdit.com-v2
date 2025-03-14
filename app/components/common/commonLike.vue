@@ -3,11 +3,20 @@
     class="flex items-center space-x-2 text-neutral-500 hover:text-neutral-300 transform duration-500"
     :class="type === 'post' ? 'flex flex-col' : ''">
     <UIcon
+      v-if="loading"
+      name="svg-spinners:ring-resize"
+      class="text-neutral-500"
+      :class="type === 'post' ? 'order-1 size-9 mx-auto' : 'order-0 size-[46px]'" />
+    <UIcon
+      v-else
       :name="iconName"
       :size="iconSize"
       @click="handleLike"
       class="cursor-pointer"
-      :class="type === 'post' ? 'order-1' : 'order-0'" />
+      :class="[
+        type === 'post' ? 'order-1 mx-auto' : 'order-0',
+        hasLiked || canlike ? 'text-neutral-700' : '',
+      ]" />
     <CommonAnimateNumber
       ref="animateNumberRef"
       v-model:count="count"
@@ -51,7 +60,9 @@ const canlike = computed(() => {
     ? likes.value?.some((like: any) => like.user_created === authStore.user?.id)
     : false;
 });
+
 let lastClickTime = 0;
+const loading = ref(false);
 
 const handleLike = async () => {
   if (Date.now() - lastClickTime < 5000) return;
@@ -59,8 +70,8 @@ const handleLike = async () => {
 
   if (!authStore.user) {
     return toast.add({
-      title: "未登录",
-      description: "请您先登录，以便进行点赞操作。",
+      title: "登录提示",
+      description: "请您先登录，再进行点赞操作。",
       icon: "hugeicons:alert-02",
       color: "warning",
     });
@@ -68,29 +79,33 @@ const handleLike = async () => {
 
   if (hasLiked.value || canlike.value) {
     return toast.add({
-      title: "已点赞",
+      title: "点赞提示",
       description: `您已对该${props.type === "post" ? "内容" : "评论"}点赞，不能重复点赞。`,
       icon: "hugeicons:alert-02",
       color: "info",
     });
   }
 
-  await $directus.request(
-    $content.createItem("likes", {
-      user_created: authStore.user.id,
-      target_id: props.id,
-      target_type: props.type,
-    })
-  );
+  try {
+    loading.value = true;
+    await $directus.request(
+      $content.createItem("likes", {
+        user_created: authStore.user.id,
+        target_id: props.id,
+        target_type: props.type,
+      })
+    );
+    hasLiked.value = true;
 
-  hasLiked.value = true;
-
-  toast.add({
-    title: "点赞成功",
-    description: "您的点赞操作已提交，感谢参与。",
-    icon: "hugeicons:checkmark-circle-02",
-    color: "success",
-  });
+    toast.add({
+      title: "点赞成功",
+      description: "您的点赞操作已提交，感谢参与。",
+      icon: "hugeicons:checkmark-circle-02",
+      color: "success",
+    });
+  } finally {
+    loading.value = false;
+  }
 };
 
 const increment = () => {

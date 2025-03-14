@@ -45,7 +45,7 @@
     v-if="isLoading"
     class="flex items-center justify-center bg-black/80 rounded-full absolute w-16 h-16 ring-2 ring-neutral-800">
     <UIcon
-      name="svg-spinners:90-ring-with-bg"
+      name="svg-spinners:ring-resize"
       class="size-8 text-primary-500" />
   </div>
 </template>
