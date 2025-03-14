@@ -9,7 +9,7 @@ export const useAvatar = () => {
   const avatarUrl = computed(() => {
     const avatarId = authStore.user?.avatar;
     return avatarId
-      ? `${useAssets(avatarId)}?fit=outside&quality=80&withoutEnlargement&width=64&height=64`
+      ? `${useAssets(avatarId)}?fit=outside&quality=80&withoutEnlargement&width=80&height=80`
       : null;
   });
 

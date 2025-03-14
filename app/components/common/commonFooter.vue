@@ -34,7 +34,7 @@ const {
   public: { buildTime },
 } = useRuntimeConfig();
 
-const { data: links } = await useAsyncData("links", () => {
+const { data: links } = await useLazyAsyncData("links", () => {
   return $directus.request(
     $content.readItems("links", {
       fields: ["*.*"],

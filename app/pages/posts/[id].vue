@@ -23,9 +23,21 @@
       </div>
 
       <div class="pb-5">
-        <MDC
-          :value="post.content"
-          class="prose prose-img:rounded-lg prose-pre:rounded-lg prose-a:text-primary-500 prose-h3:prose-a:text-neutral-300 dark:prose-invert" />
+        <Suspense>
+          <template #default>
+            <MDC
+              :value="post.content"
+              class="prose prose-img:rounded-lg prose-pre:rounded-lg prose-a:text-primary-500 prose-h3:prose-a:text-neutral-300 dark:prose-invert" />
+          </template>
+          <template #fallback>
+            <div
+              class="flex flex-col justify-center items-center mt-12 space-y-3 text-primary-600/80">
+              <UIcon
+                name="svg-spinners:blocks-shuffle-3"
+                class="size-9" />
+            </div>
+          </template>
+        </Suspense>
       </div>
 
       <div class="flex justify-center m-5">
@@ -117,7 +129,7 @@ onMounted(async () => {
         toast.add({
           id: postId.value,
           title: "页面删除通知",
-          description: "您正在访问的页面已被删除。",
+          description: `页面 ${postId.value} 已被删除。`,
           icon: "hugeicons:delete-04",
           color: "warning",
         });

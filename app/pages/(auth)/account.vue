@@ -11,8 +11,8 @@
         <div class="grid gap-2">
           <div class="flex flex-col items-center space-y-2 select-none">
             <div class="text-2xl font-bold">{{ user?.first_name }}</div>
-            <div class="text-sm text-neutral-500">当前登录位置：{{ user?.location }}</div>
             <div class="text-sm text-neutral-500">{{ user?.email }}</div>
+            <div class="text-sm text-neutral-500">登录位置：{{ user?.location }}</div>
           </div>
         </div>
       </div>

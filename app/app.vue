@@ -12,7 +12,7 @@
 const appConfig = useAppConfig();
 const authStore = useAuthStore();
 
-useAsyncData(
+useLazyAsyncData(
   "user-data",
   async () => {
     await authStore.fetchUserData();

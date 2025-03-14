@@ -13,18 +13,19 @@
   "dependencies": {
     "@directus/sdk": "^19.0.1",
     "@nuxt/ui": "^3.0.0",
-    "@nuxtjs/mdc": "^0.15.0",
     "@pinia/nuxt": "^0.10.1",
     "@vueuse/nuxt": "^13.0.0",
     "nuxt": "^3.16.0",
     "nuxt-emoji-picker": "^1.1.0",
     "pinia": "^3.0.1",
-    "rehype-slug": "^6.0.0",
-    "rehype-toc": "^3.0.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16"
+    "@iconify-json/hugeicons": "^1.2.4",
+    "@nuxtjs/mdc": "^0.15.0",
+    "@tailwindcss/typography": "^0.5.16",
+    "rehype-slug": "^6.0.0",
+    "rehype-toc": "^3.0.2"
   }
 }
