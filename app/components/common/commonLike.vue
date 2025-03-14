@@ -35,19 +35,28 @@ const { data: likes } = await useLazyAsyncData(`likes-${props.type}-${props.id}`
   });
 });
 
+const hasLiked = ref(false);
 const likesCount = computed(() => likes.value?.length || 0);
 const count = ref(likesCount.value);
 const animateNumberRef = ref();
 const iconName = computed(() => props.icon);
 const iconSize = computed(() => props.size || "32");
 
-const hasLiked = computed(() => {
+hasLiked.value = !!authStore.user?.id
+  ? !!likes.value?.some((like: any) => like.user_created === authStore.user?.id)
+  : false;
+
+const canlike = computed(() => {
   return authStore.user?.id
     ? likes.value?.some((like: any) => like.user_created === authStore.user?.id)
     : false;
 });
+let lastClickTime = 0;
 
 const handleLike = async () => {
+  if (Date.now() - lastClickTime < 5000) return;
+  lastClickTime = Date.now();
+
   if (!authStore.user) {
     return toast.add({
       title: "未登录",
@@ -57,10 +66,10 @@ const handleLike = async () => {
     });
   }
 
-  if (hasLiked.value) {
+  if (hasLiked.value || canlike.value) {
     return toast.add({
       title: "已点赞",
-      description: "您已对该内容点赞，不能重复点赞。",
+      description: `您已对该${props.type === "post" ? "内容" : "评论"}点赞，不能重复点赞。`,
       icon: "hugeicons:alert-02",
       color: "info",
     });
@@ -73,6 +82,8 @@ const handleLike = async () => {
       target_type: props.type,
     })
   );
+
+  hasLiked.value = true;
 
   toast.add({
     title: "点赞成功",
