@@ -7,11 +7,9 @@
     to="/account"
     v-else-if="authStore.isLoggedIn">
     <UAvatar
-      :src="`${useAssets(
-        authStore.user?.avatar || ''
-      )}?fit=outside&quality=40&withoutEnlargement&width=64&height=64`"
+      :src="`${useAssets(authStore.user?.avatar || '')}`"
       :alt="authStore.user?.first_name"
-      class="ring-2 ring-neutral-800"
+      class="ring-2 ring-neutral-200 dark:ring-neutral-800"
       size="lg" />
   </ULink>
 

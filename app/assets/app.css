@@ -7,6 +7,21 @@
 
 :root {
   --ui-radius: 0.5rem;
+  --scrollbar-track: oklch(0.22 0 0);
+  --scrollbar-thumb: oklch(0.25 0 0);
+  --scrollbar-thumb-hover: oklch(0.269 0 0);
+}
+
+.light {
+  --scrollbar-track: oklch(0.96 0 0);
+  --scrollbar-thumb: oklch(0.9 0 0);
+  --scrollbar-thumb-hover: oklch(0.8 0 0);
+}
+
+.dark {
+  --scrollbar-track: oklch(0.22 0 0);
+  --scrollbar-thumb: oklch(0.25 0 0);
+  --scrollbar-thumb-hover: oklch(0.269 0 0);
 }
 
 html {
@@ -15,25 +30,21 @@ html {
   scroll-behavior: smooth !important;
 }
 
-/* 设置滚动条的宽度 */
 ::-webkit-scrollbar {
   width: 12px;
 }
 
-/* 设置滚动条的轨道 */
 ::-webkit-scrollbar-track {
-  background: oklch(0.22 0 0);
+  background: var(--scrollbar-track);
 }
 
-/* 设置滚动条的滑块 */
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.25 0 0);
+  background: var(--scrollbar-thumb);
   border-radius: 6px;
 }
 
-/* 设置滚动条滑块的悬停效果 */
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.269 0 0);
+  background: var(--scrollbar-thumb-hover);
 }
 
 .eric svg {
@@ -84,9 +95,14 @@ html {
   animation-delay: 2s;
 }
 
-.year {
+.dark .year {
   font-family: "Inter";
   -webkit-text-stroke: 0.03em var(--color-neutral-50);
+}
+
+.year {
+  font-family: "Inter";
+  -webkit-text-stroke: 0.03em var(--color-neutral-950);
 }
 
 .fade-enter-active,
@@ -138,32 +154,30 @@ html {
   animation: drawCheck 0.5s 0.9s forwards;
 }
 
-/* 链接的基础样式 */
-.glow-link,
+/* 仅作用于非 h1-h6 内部的链接 */
+.glow-link:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a),
 .prose a {
-  position: relative; /* 使伪元素相对于链接定位 */
-  text-decoration: none; /* 去除默认下划线 */
+  position: relative;
+  text-decoration: none;
 }
 
-/* 定义链接的::after伪元素 */
-.glow-link::after,
-.prose a::after {
-  content: ""; /* 伪元素内容为空 */
-  position: absolute; /* 绝对定位 */
-  bottom: -2px; /* 下划线位置，可根据需要调整 */
-  left: 50%; /* 初始位置在中间 */
-  width: 0; /* 初始宽度为0 */
-  height: 2px; /* 下划线高度 */
-  background-color: var(--color-emerald-500); /* 下划线颜色 */
-  transition: width 0.3s ease-in-out, left 0.3s ease-in-out; /* 过渡效果 */
+.glow-link:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a)::after,
+.prose a:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a)::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-emerald-500);
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
 }
 
-/* 鼠标悬停时的效果 */
-.glow-link:hover::after,
-.prose a:hover::after {
-  width: 100%; /* 下划线扩展至全宽 */
-  left: 0; /* 起始位置调整为左侧 */
-  box-shadow: 0 0 8px var(--color-emerald-500); /* 发光效果 */
+.glow-link:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a):hover::after,
+.prose a:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a):hover::after {
+  width: 100%;
+  left: 0;
+  box-shadow: 0 0 8px var(--color-emerald-500);
 }
 
 textarea {

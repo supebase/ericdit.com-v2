@@ -16,7 +16,7 @@
           hide-group-names
           disable-sticky-group-names
           disable-skin-tones
-          theme="dark"
+          :theme="theme"
           @select="handleEmojiSelect"
           :disabled-groups="disabledGroups" />
       </div>
@@ -25,6 +25,9 @@
 </template>
 
 <script setup lang="ts">
+const colorMode = useColorMode();
+const theme = computed(() => (colorMode.value === "dark" ? "dark" : "light"));
+
 const props = defineProps<{ user: string | null }>();
 
 const isPickerVisible = ref(false);

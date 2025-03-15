@@ -29,19 +29,21 @@
                 <ULink
                   :to="`/posts/${post.id}`"
                   class="text-lg font-semibold select-none">
-                  <div class="duration-500 ease-in-out hover:scale-105 glow-link">{{ post.title }}</div>
+                  <div class="duration-500 ease-in-out hover:scale-105 glow-link">
+                    {{ post.title }}
+                  </div>
                 </ULink>
                 <CommentsCount
                   :postId="post.id"
                   :allowComment="post.allowComment"
                   class="text-sm" />
               </div>
-              <div class="text-neutral-600 text-sm select-none mt-1">
+              <div class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1">
                 <div>{{ useReadingTime(post.content) }}</div>
               </div>
             </div>
             <div
-              class="text-neutral-600 text-sm select-none mt-1"
+              class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1"
               :class="post.date_updated ? 'underline underline-offset-4 decoration-dashed' : ''">
               {{ useDatetime(post.date_created) }}
             </div>

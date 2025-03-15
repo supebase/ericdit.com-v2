@@ -1,9 +1,9 @@
 <template>
-  <div class="flex items-center text-neutral-600 text-sm select-none">
+  <div class="flex items-center text-neutral-400 dark:text-neutral-600 text-sm select-none">
     <div v-if="status === 'pending'">
       <UIcon
         name="svg-spinners:3-dots-scale"
-        class="size-[15px] text-neutral-600"
+        class="size-[15px] text-neutral-400 dark:text-neutral-600"
         v-if="props.isComment" />
     </div>
     <span v-else-if="props.allowComment">

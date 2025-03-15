@@ -5,16 +5,14 @@
     <div class="group flex items-center">
       <UAvatarGroup>
         <UAvatar
-          size="lg"
-          :src="`${useAssets(
-            author.authors_id.avatar
-          )}?fit=outside&quality=40&withoutEnlargement&width=80&height=80`"
+          size="xl"
+          :src="`${useAssets(author.authors_id.avatar)}`"
           :alt="author.authors_id.name"
           v-for="author in authors"
           :key="author.authors_id.id" />
       </UAvatarGroup>
       <div class="ml-4">
-        <p class="font-medium text-neutral-200 select-none">
+        <p class="font-medium text-neutral-800 dark:text-neutral-200 select-none">
           {{ authors.map((author) => author.authors_id.name).join(" & ") }}
         </p>
         <div class="flex items-center space-x-3 text-neutral-500 select-none">
@@ -27,7 +25,9 @@
               {{ useDatetime(date) }}发布
             </div>
             <template #content>
-              <div class="px-3 py-1 text-sm">{{ updated ? useDatetime(updated || "") : "无" }}更新</div>
+              <div class="px-3 py-1 text-sm">
+                {{ updated ? useDatetime(updated || "") : "无" }}更新
+              </div>
             </template>
           </UPopover>
           <div>&bull;</div>

@@ -1,12 +1,14 @@
 <template>
   <div
-    class="flex flex-col justify-center items-center text-neutral-700 space-y-1.5 mb-6 text-sm select-none">
+    class="flex flex-col justify-center items-center text-neutral-300 dark:text-neutral-700 space-y-1.5 mb-6 text-sm select-none">
     <div class="space-y-2">
       <div class="flex justify-center items-center space-x-5">
+        <CommonColorMode />
+
         <NuxtLink
           :to="link.url"
           target="_blank"
-          class="text-neutral-500 hover:text-neutral-300 transform duration-500"
+          class="text-neutral-400 dark:text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300 transform duration-500"
           tabindex="-1"
           v-for="link in links">
           <UIcon

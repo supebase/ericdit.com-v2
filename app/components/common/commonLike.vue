@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center space-x-2 text-neutral-500 hover:text-neutral-300 transform duration-500"
+    class="flex items-center space-x-2 text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transform duration-500"
     :class="type === 'post' ? 'flex flex-col' : ''">
     <UIcon
       v-if="loading"
@@ -15,7 +15,7 @@
       class="cursor-pointer"
       :class="[
         type === 'post' ? 'order-1 mx-auto' : 'order-0',
-        hasLiked || canlike ? 'text-neutral-700' : '',
+        hasLiked || canlike ? 'text-neutral-300 dark:text-neutral-700' : '',
       ]" />
     <CommonAnimateNumber
       ref="animateNumberRef"

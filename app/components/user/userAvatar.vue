@@ -4,7 +4,7 @@
       <UAvatar
         :src="avatarUrl || ''"
         :alt="authStore.user?.first_name"
-        class="ring-2 ring-neutral-700 w-16 h-16" />
+        class="ring-2 ring-neutral-300 dark:ring-neutral-700 w-16 h-16" />
     </div>
 
     <div class="flex items-center space-x-5">
@@ -67,13 +67,13 @@ const handleFileUpload = (event: Event) => {
     const uploadedFile = target.files[0];
     if (
       ["image/jpeg", "image/png", "image/gif"].includes(uploadedFile.type) &&
-      uploadedFile.size <= 2 * 1024 * 1024
+      uploadedFile.size <= 1 * 1024 * 1024
     ) {
       uploadAvatar(target.files[0]);
     } else {
       toast.add({
         title: "上传通知",
-        description: "文件格式不支持或文件大小超过 2MB",
+        description: "文件格式不支持或文件大小超过 1 MB",
         icon: "hugeicons:alert-02",
         color: "warning",
       });

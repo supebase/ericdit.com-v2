@@ -15,14 +15,12 @@
           :isComment="true" />
         <div
           v-if="comments?.length"
-          class="text-sm text-neutral-600 underline underline-offset-4 decoration-dashed select-none">
+          class="text-sm text-neutral-400 dark:text-neutral-600 underline underline-offset-4 decoration-dashed select-none">
           超过半年或字数太少的评论会隐藏
         </div>
       </div>
 
-      <div
-        v-if="visibleComments.length || hiddenComments.length"
-        class="divide-dashed divide-y divide-neutral-700/80">
+      <div v-if="visibleComments.length || hiddenComments.length">
         <!-- 显示符合条件的评论 -->
         <div
           v-for="comment in visibleComments"
@@ -37,18 +35,16 @@
 
         <!-- 可隐藏的评论（旧评论 & 短评论） -->
         <div v-if="hiddenComments.length">
-          <div class="flex justify-center py-4">
+          <div class="flex justify-center py-3">
             <button
               type="button"
               @click="showHiddenComments = !showHiddenComments"
-              class="my-4 text-sm text-neutral-600 cursor-pointer select-none">
+              class="my-4 text-sm text-neutral-400 dark:text-neutral-600 cursor-pointer select-none">
               {{ showHiddenComments ? "已显示全部评论" : "显示部分隐藏评论" }}
             </button>
           </div>
 
-          <div
-            v-if="showHiddenComments"
-            class="divide-dashed divide-y divide-neutral-700/80">
+          <div v-if="showHiddenComments">
             <div
               v-for="comment in hiddenComments"
               :key="comment.id.toString()"
@@ -69,8 +65,8 @@
           v-if="user">
           <UIcon
             name="hugeicons:comment-02"
-            class="w-10 h-10 text-neutral-800" />
-          <div class="text-sm text-neutral-600">评论区空空如也</div>
+            class="w-10 h-10 text-neutral-200 dark:text-neutral-800" />
+          <div class="text-sm text-neutral-400 dark:text-neutral-600">评论区空空如也</div>
         </div>
       </div>
     </div>

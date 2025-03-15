@@ -1,7 +1,7 @@
 <template>
   <div v-if="userId">
     <form @submit.prevent="postComment">
-      <div class="ring-2 ring-neutral-800 bg-neutral-950/60 rounded-lg p-3">
+      <div class="ring-2 ring-neutral-200 dark:ring-neutral-800 bg-neutral-50/60 dark:bg-neutral-950/60 rounded-lg p-3">
         <UTextarea
           ref="commentInput"
           color="neutral"
@@ -12,7 +12,7 @@
           :padded="false"
           size="lg"
           v-model="comment"
-          class="text-neutral-300 w-full"
+          class="text-neutral-700 dark:text-neutral-300 w-full"
           :maxlength="500"
           :disabled="!userId"
           @input="validateInput" />
@@ -32,7 +32,7 @@
           <div class="flex items-center space-x-4">
             <span
               class="text-sm select-none"
-              :class="isExceedLimit ? 'text-red-600' : 'text-neutral-600'">
+              :class="isExceedLimit ? 'text-red-600' : 'text-neutral-400 dark:text-neutral-600'">
               {{ comment.length }} / 500
             </span>
             <UButton

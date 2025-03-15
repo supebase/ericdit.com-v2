@@ -8,9 +8,7 @@ export const useAvatar = () => {
   // 头像 URL
   const avatarUrl = computed(() => {
     const avatarId = authStore.user?.avatar;
-    return avatarId
-      ? `${useAssets(avatarId)}?fit=outside&quality=80&withoutEnlargement&width=80&height=80`
-      : null;
+    return avatarId ? `${useAssets(avatarId)}` : null;
   });
 
   // 获取用户头像
