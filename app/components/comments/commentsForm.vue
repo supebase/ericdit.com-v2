@@ -1,7 +1,7 @@
 <template>
   <div v-if="userId">
     <form @submit.prevent="postComment">
-      <div class="ring-2 ring-neutral-200 dark:ring-neutral-800 bg-neutral-50/60 dark:bg-neutral-950/60 rounded-lg p-3">
+      <div class="ring-2 ring-neutral-200 dark:ring-neutral-800 bg-neutral-50/60 dark:bg-neutral-950/60 rounded-lg p-1">
         <UTextarea
           ref="commentInput"
           color="neutral"

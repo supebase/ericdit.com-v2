@@ -29,19 +29,16 @@
                 <ULink
                   :to="`/posts/${post.id}`"
                   class="text-lg font-semibold select-none">
-                  <div class="sm:duration-500 sm:ease-in-out hover:scale-100 sm:hover:scale-105 glow-link">
-                    {{ post.title }}
+                  <div
+                    class="sm:duration-500 sm:ease-in-out hover:scale-100 sm:hover:scale-103 glow-link">
+                    <span class="line-clamp-1">{{ post.title }}</span>
                   </div>
                 </ULink>
                 <div
-                  class="flex items-center space-x-3 mt-1 sm:mt-0 sm:hidden text-sm text-neutral-400 dark:text-neutral-600">
-                  <div>{{ useDatetime(post.date_created) }}</div>
-                  <div class="text-neutral-300 dark:text-neutral-700">&bull;</div>
-                  <div>{{ useReadingTime(post.content) }}</div>
-                  <CommentsCount
-                    :postId="post.id"
-                    :allowComment="post.allowComment"
-                    class="text-sm" />
+                  class="flex items-center space-x-3 mt-1 sm:mt-0 text-sm text-neutral-400 dark:text-neutral-600">
+                  <div class="sm:hidden">{{ useDatetime(post.date_created) }}</div>
+                  <div class="sm:hidden text-neutral-300 dark:text-neutral-700">&bull;</div>
+                  <div class="sm:hidden">{{ useReadingTime(post.content) }}</div>
                   <UBadge
                     v-if="post.tag"
                     :label="post.tag.name"
@@ -50,14 +47,15 @@
                     class="opacity-65 select-none block sm:hidden" />
                 </div>
               </div>
-              <div
-                class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1 hidden sm:block">
-                <div>{{ useReadingTime(post.content) }}</div>
+              <div class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-0.5">
+                <CommentsCount
+                  :postId="post.id"
+                  :allowComment="post.allowComment"
+                  class="text-sm" />
               </div>
             </div>
             <div
-              class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1 hidden sm:block"
-              :class="post.date_updated ? 'underline underline-offset-4 decoration-dashed' : ''">
+              class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1 hidden sm:block">
               {{ useDatetime(post.date_created) }}
             </div>
           </article>

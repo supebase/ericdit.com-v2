@@ -40,7 +40,34 @@
     </Transition>
   </div>
 
-  <div class="fixed top-4 right-5 sm:top-10 sm:right-10">
+  <div class="fixed top-4 right-5 sm:top-10 sm:right-10 flex items-center space-x-7">
+    <UChip
+      :ui="{ base: 'px-1 py-2' }"
+      :text="0"
+      color="neutral"
+      size="3xl">
+      <UIcon
+        name="hugeicons:all-bookmark"
+        class="size-6 text-neutral-500 transform duration-500 hover:text-neutral-300 cursor-pointer" />
+    </UChip>
+
+    <UPopover arrow>
+      <UChip
+        :ui="{ base: 'animate-bounce' }"
+        inset>
+        <UIcon
+          name="hugeicons:notification-02"
+          class="size-6 text-neutral-500 transform duration-500 hover:text-neutral-300 cursor-pointer" />
+      </UChip>
+      <template #content>
+        <div class="size-48 m-4 inline-flex">
+          <div class="flex justify-center items-center text-sm text-neutral-500 w-full">
+            通知还未完成
+          </div>
+        </div>
+      </template>
+    </UPopover>
+
     <UserAuth />
   </div>
 </template>

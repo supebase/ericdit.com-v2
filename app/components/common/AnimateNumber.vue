@@ -2,7 +2,7 @@
   <div
     ref="counter"
     class="counter select-none"
-    :class="type === 'post' ? 'text-center !text-xl' : ''">
+    :class="type === 'post' ? 'text-center !text-lg' : ''">
     <div class="number">
       {{ props.count }}
     </div>

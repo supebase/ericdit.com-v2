@@ -2,6 +2,7 @@
   <UApp
     :toaster="appConfig.toaster"
     :tooltip="appConfig.tooltip">
+    <NuxtLoadingIndicator />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

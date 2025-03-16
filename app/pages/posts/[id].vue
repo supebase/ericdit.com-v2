@@ -15,10 +15,17 @@
             :read="useReadingTime(post.content)"
             :updated="post.date_updated" />
 
-          <UIcon
-            name="hugeicons:share-05"
-            class="size-[22px] sm:size-5 text-neutral-500 cursor-pointer hover:text-neutral-300 transform duration-500"
-            @click="shareButton(post.title, post.summary)" />
+          <div class="space-x-5 text-neutral-500 transform duration-500 mt-1.5 hidden sm:block">
+            <UIcon
+              :name="isBookmarked ? 'hugeicons:bookmark-check-02' : 'hugeicons:bookmark-02'"
+              class="size-[22px] sm:size-5 hover:text-neutral-300 cursor-pointer"
+              :class="isBookmarked ? 'text-primary-500 hover:text-primary-500' : ''"
+              @click="handleBookmark" />
+            <UIcon
+              name="hugeicons:share-05"
+              class="size-[22px] sm:size-5 hover:text-neutral-300 cursor-pointer"
+              @click="shareButton(post.title, post.summary)" />
+          </div>
         </div>
       </div>
 
@@ -42,12 +49,23 @@
         </Suspense>
       </div>
 
-      <div class="flex justify-center m-5">
+      <div class="flex justify-around sm:justify-center items-end m-5 text-neutral-500 transform duration-500">
+        <UIcon
+          :name="isBookmarked ? 'hugeicons:bookmark-check-02' : 'hugeicons:bookmark-02'"
+          class="size-6 sm:size-5 hover:text-neutral-300 cursor-pointer mb-1 block sm:hidden"
+          :class="isBookmarked ? 'text-primary-500 hover:text-primary-500' : ''"
+          @click="handleBookmark" />
+
         <CommonLike
           :id="post.id"
           type="post"
           icon="hugeicons:clapping-02"
-          size="36" />
+          size="28" />
+
+        <UIcon
+          name="hugeicons:share-05"
+          class="size-6 sm:size-5 hover:text-neutral-300 cursor-pointer mb-1 block sm:hidden"
+          @click="shareButton(post.title, post.summary)" />
       </div>
 
       <div v-if="post.allowComment">
@@ -160,6 +178,12 @@ const shareButton = (title: string, text: string) => {
       color: "warning",
     });
   }
+};
+
+const isBookmarked = ref(false);
+
+const handleBookmark = () => {
+  isBookmarked.value = !isBookmarked.value;
 };
 
 useSeoMeta({
