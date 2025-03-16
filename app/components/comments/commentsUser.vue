@@ -15,7 +15,7 @@
         <div class="flex items-center space-x-3 select-none">
           <div class="text-base font-medium text-neutral-800 dark:text-neutral-200">{{ user.first_name }}</div>
           <div class="text-sm text-neutral-500">{{ useDatetime(date) }}</div>
-          <div class="text-sm text-neutral-500">&bull;</div>
+          <div class="text-sm text-neutral-300 dark:text-neutral-700">&bull;</div>
           <div class="text-sm text-neutral-500">{{ user.location }}</div>
         </div>
 

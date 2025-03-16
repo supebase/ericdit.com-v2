@@ -1,7 +1,7 @@
 <template>
   <UCard
     variant="soft"
-    class="mt-11 mb-14 max-w-md mx-auto">
+    class="mt-24 sm:mt-11 mb-14 max-w-md mx-auto">
     <div class="space-y-6">
       <div class="flex justify-center">
         <UserAvatar />

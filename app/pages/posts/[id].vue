@@ -1,12 +1,12 @@
 <template>
-  <div class="mb-14">
+  <div class="mb-14 mt-12 sm:mt-0">
     <div v-if="status === 'pending' && !post">
       <PostsLoading />
     </div>
     <template v-else-if="post">
       <div class="h-10"></div>
       <div class="flex flex-col space-y-4">
-        <div class="text-2xl font-bold">{{ post.title }}</div>
+        <div class="text-xl sm:text-2xl font-bold">{{ post.title }}</div>
 
         <div class="flex justify-between items-center">
           <PostsAuthor
@@ -17,7 +17,7 @@
 
           <UIcon
             name="hugeicons:share-05"
-            class="size-5 text-neutral-500 cursor-pointer hover:text-neutral-300 transform duration-500"
+            class="size-[22px] sm:size-5 text-neutral-500 cursor-pointer hover:text-neutral-300 transform duration-500"
             @click="shareButton(post.title, post.summary)" />
         </div>
       </div>

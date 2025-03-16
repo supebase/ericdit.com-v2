@@ -1,23 +1,13 @@
 <template>
-  <div
-    class="max-w-xl mx-auto"
-    v-if="width > 1080">
-    <CommonHeader />
-    <slot />
+  <div class="max-w-xl mx-auto">
+    <div class="bg-white dark:bg-neutral-900 p-8 w-full fixed top-0 z-50 sm:z-0 sm:p-0 sm:bg-transparent">
+      <CommonHeader />
+    </div>
+
+    <div class="px-5 sm:px-0">
+      <slot />
+    </div>
+
     <CommonFooter />
   </div>
-
-  <div
-    class="flex justify-center items-center max-w-xl mx-auto px-6 h-screen"
-    v-else>
-    <UAlert
-      title="提示信息"
-      description="本网站暂不支持移动设备，建议您使用桌面端浏览器进行访问。"
-      icon="hugeicons:alert-02"
-      color="error" />
-  </div>
 </template>
-
-<script setup lang="ts">
-const { width } = useWindowSize();
-</script>

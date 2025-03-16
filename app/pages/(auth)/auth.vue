@@ -1,7 +1,7 @@
 <template>
   <UCard
     variant="soft"
-    class="mt-11 mb-14 max-w-md mx-auto">
+    class="mt-24 sm:mt-11 mb-14 max-w-md mx-auto">
     <UTabs
       :items="items"
       :key="tabsKey"
@@ -20,6 +20,7 @@
               size="xl"
               icon="hugeicons:at"
               class="w-full"
+              @blur="handleFocus"
               placeholder="电子邮件" />
             <UInput
               v-model="password"
@@ -28,6 +29,7 @@
               icon="hugeicons:lock-key"
               class="w-full"
               :type="show.login ? 'text' : 'password'"
+              @blur="handleFocus"
               placeholder="登录密码">
               <template #trailing>
                 <UButton
@@ -48,6 +50,7 @@
               variant="outline"
               size="xl"
               icon="hugeicons:user-square"
+              @blur="handleFocus"
               placeholder="你的名字"
               class="w-full" />
             <UInput
@@ -55,6 +58,7 @@
               variant="outline"
               size="xl"
               icon="hugeicons:at"
+              @blur="handleFocus"
               placeholder="电子邮件"
               class="w-full" />
             <UInput
@@ -63,6 +67,7 @@
               size="xl"
               icon="hugeicons:square-lock-add-02"
               :type="show.register ? 'text' : 'password'"
+              @blur="handleFocus"
               placeholder="输入密码"
               class="w-full">
               <template #trailing>
@@ -80,6 +85,7 @@
               size="xl"
               icon="hugeicons:square-lock-check-02"
               :type="show.confirm ? 'text' : 'password'"
+              @blur="handleFocus"
               placeholder="确认密码"
               class="w-full">
               <template #trailing>
@@ -174,6 +180,14 @@ onMounted(async () => {
     navigateTo("/");
   }
 });
+
+onDeactivated(() => {
+  clearInputs();
+})
+
+const handleFocus = (event: FocusEvent) => {
+  (event.target as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
+};
 
 useSeoMeta({ title: "登录或注册" });
 </script>

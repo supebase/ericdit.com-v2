@@ -30,7 +30,7 @@
               </div>
             </template>
           </UPopover>
-          <div>&bull;</div>
+          <div class="text-neutral-300 dark:text-neutral-700">&bull;</div>
           <div class="text-sm">阅读约需 {{ read }}</div>
         </div>
       </div>

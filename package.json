@@ -5,7 +5,7 @@
   "scripts": {
     "set-build-time": "node scripts/set-build-time.mjs",
     "build": "npm run set-build-time && nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --host=0.0.0.0",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

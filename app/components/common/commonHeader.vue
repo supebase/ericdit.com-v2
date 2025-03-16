@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-10 left-10">
+  <div class="fixed top-4 left-5 sm:top-10 sm:left-10">
     <Transition
       name="fade"
       mode="out-in">
@@ -40,7 +40,7 @@
     </Transition>
   </div>
 
-  <div class="fixed top-10 right-10">
+  <div class="fixed top-4 right-5 sm:top-10 sm:right-10">
     <UserAuth />
   </div>
 </template>

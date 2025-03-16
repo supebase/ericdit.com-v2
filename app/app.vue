@@ -20,6 +20,10 @@ useLazyAsyncData(
   { server: true }
 );
 
+document.addEventListener("gesturestart", function (event) {
+  event.preventDefault();
+});
+
 useHead({
   titleTemplate: "%s - Eric",
 });

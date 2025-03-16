@@ -6,10 +6,22 @@
         class="size-[15px] text-neutral-400 dark:text-neutral-600"
         v-if="props.isComment" />
     </div>
-    <span v-else-if="props.allowComment">
-      {{ commentList.length > 0 ? `${commentList.length} 条评论` : "" }}
+    <span
+      v-else-if="props.allowComment"
+      class="flex items-center space-x-3">
+      <div
+        v-if="commentList.length > 0 && !props.isComment"
+        class="text-neutral-300 dark:text-neutral-700">
+        &bull;
+      </div>
+      <div>{{ commentList.length > 0 ? `${commentList.length} 条评论` : "" }}</div>
     </span>
-    <span v-else>评论功能已关闭</span>
+    <span
+      v-else
+      class="flex items-center space-x-3">
+      <div class="text-neutral-300 dark:text-neutral-700">&bull;</div>
+      <div>评论功能已关闭</div>
+    </span>
   </div>
 </template>
 

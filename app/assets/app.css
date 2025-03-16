@@ -195,6 +195,12 @@ hr {
   );
 }
 
+@media (max-width: 1079px) {
+  .toc {
+    display: none;
+  }
+}
+
 /* TOC容器样式 */
 .toc {
   width: 260px;

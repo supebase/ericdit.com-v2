@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-14">
+  <div class="mb-14 mt-12 sm:mt-0">
     <div v-if="status === 'pending' && !posts">
       <PostsLoading />
     </div>
@@ -10,7 +10,7 @@
           :key="year">
           <div class="relative select-none h-16 -z-10">
             <span
-              class="absolute -left-8 top-7 text-8xl text-transparent opacity-5 font-bold year"
+              class="absolute top-7 -left-4 sm:-left-8 text-8xl text-transparent opacity-5 font-bold year"
               >{{ year }}</span
             >
           </div>
@@ -23,27 +23,40 @@
               :label="post.tag.name"
               color="neutral"
               variant="soft"
-              class="absolute top-3.5 -left-14 opacity-65 select-none" />
+              class="absolute top-3.5 -left-14 opacity-65 select-none hidden sm:block" />
             <div class="flex space-x-4">
               <div>
                 <ULink
                   :to="`/posts/${post.id}`"
                   class="text-lg font-semibold select-none">
-                  <div class="duration-500 ease-in-out hover:scale-105 glow-link">
+                  <div class="sm:duration-500 sm:ease-in-out hover:scale-100 sm:hover:scale-105 glow-link">
                     {{ post.title }}
                   </div>
                 </ULink>
-                <CommentsCount
-                  :postId="post.id"
-                  :allowComment="post.allowComment"
-                  class="text-sm" />
+                <div
+                  class="flex items-center space-x-3 mt-1 sm:mt-0 sm:hidden text-sm text-neutral-400 dark:text-neutral-600">
+                  <div>{{ useDatetime(post.date_created) }}</div>
+                  <div class="text-neutral-300 dark:text-neutral-700">&bull;</div>
+                  <div>{{ useReadingTime(post.content) }}</div>
+                  <CommentsCount
+                    :postId="post.id"
+                    :allowComment="post.allowComment"
+                    class="text-sm" />
+                  <UBadge
+                    v-if="post.tag"
+                    :label="post.tag.name"
+                    color="neutral"
+                    variant="soft"
+                    class="opacity-65 select-none block sm:hidden" />
+                </div>
               </div>
-              <div class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1">
+              <div
+                class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1 hidden sm:block">
                 <div>{{ useReadingTime(post.content) }}</div>
               </div>
             </div>
             <div
-              class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1"
+              class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1 hidden sm:block"
               :class="post.date_updated ? 'underline underline-offset-4 decoration-dashed' : ''">
               {{ useDatetime(post.date_created) }}
             </div>
