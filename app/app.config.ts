@@ -2,7 +2,7 @@ export default defineAppConfig({
   ui: {
     colors: {
       primary: "emerald",
-      neutral: "zinc",
+      neutral: "slate",
     },
     icons: {
       loading: "svg-spinners:ring-resize",

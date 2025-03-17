@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@iconify-json/hugeicons": "^1.2.4",
+    "@iconify-json/svg-spinners": "^1.2.2",
     "@nuxtjs/mdc": "^0.15.0",
     "@tailwindcss/typography": "^0.5.16",
     "rehype-slug": "^6.0.0",

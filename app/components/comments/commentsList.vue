@@ -66,7 +66,7 @@
           <UIcon
             name="hugeicons:comment-02"
             class="w-10 h-10 text-neutral-200 dark:text-neutral-800" />
-          <div class="text-sm text-neutral-400 dark:text-neutral-600">评论区空空如也</div>
+          <div class="text-sm text-neutral-300 dark:text-neutral-700">评论区空空如也</div>
         </div>
       </div>
     </div>

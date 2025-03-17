@@ -98,6 +98,16 @@ export default defineNuxtConfig({
     },
   ],
 
+  icon: {
+    serverBundle: {
+      collections: ["hugeicons", "svg-spinners"],
+      externalizeIconsJson: true,
+    },
+    clientBundle: {
+      scan: true,
+    },
+  },
+
   colorMode: {
     preference: "dark",
   },

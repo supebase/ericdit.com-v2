@@ -17,20 +17,19 @@
           <article
             v-for="post in groupedPosts[year]"
             :key="post.id"
-            class="relative flex justify-between py-3">
+            class="relative flex justify-between py-3 sm:py-5">
             <UBadge
               v-if="post.tag"
               :label="post.tag.name"
               color="neutral"
               variant="soft"
-              class="absolute top-3.5 -left-14 opacity-65 select-none hidden sm:block" />
+              class="absolute top-[22px] -left-14 opacity-65 select-none hidden sm:block" />
             <div class="flex space-x-4">
               <div>
                 <ULink
                   :to="`/posts/${post.id}`"
                   class="text-lg font-semibold select-none">
-                  <div
-                    class="sm:duration-500 sm:ease-in-out hover:scale-100 sm:hover:scale-103 glow-link">
+                  <div class="glow-link w-fit">
                     <span class="line-clamp-1">{{ post.title }}</span>
                   </div>
                 </ULink>
@@ -45,6 +44,9 @@
                     color="neutral"
                     variant="soft"
                     class="opacity-65 select-none block sm:hidden" />
+                </div>
+                <div class="mt-1 text-sm text-neutral-400 dark:text-neutral-600 select-none hidden sm:line-clamp-1 absolute max-w-md">
+                  {{ post.summary }}
                 </div>
               </div>
               <div class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-0.5">
@@ -81,7 +83,16 @@ const {
   refresh,
 } = await useLazyAsyncData("posts", async () => {
   return await fetchPosts({
-    fields: ["id", "title", "content", "tag.*", "allowComment", "date_created", "date_updated"],
+    fields: [
+      "id",
+      "title",
+      "summary",
+      "content",
+      "tag.*",
+      "allowComment",
+      "date_created",
+      "date_updated",
+    ],
     sort: ["-date_created"],
     filter: { status: { _eq: "published" } },
   });
@@ -105,7 +116,18 @@ const sortedYears = computed(() => {
 
 onMounted(async () => {
   subscribeToPosts(
-    { fields: ["id", "title", "content", "tag.*", "allowComment", "date_created", "date_updated"] },
+    {
+      fields: [
+        "id",
+        "title",
+        "summary",
+        "content",
+        "tag.*",
+        "allowComment",
+        "date_created",
+        "date_updated",
+      ],
+    },
     async (item) => {
       if (item.event === "create" || item.event === "delete") {
         await refresh();

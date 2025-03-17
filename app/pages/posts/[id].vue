@@ -15,23 +15,16 @@
             :read="useReadingTime(post.content)"
             :updated="post.date_updated" />
 
-          <div class="space-x-5 text-neutral-500 transform duration-500 mt-1.5 hidden sm:block">
-            <UIcon
-              :name="isBookmarked ? 'hugeicons:bookmark-check-02' : 'hugeicons:bookmark-02'"
-              class="size-[22px] sm:size-5 hover:text-neutral-300 cursor-pointer"
-              :class="isBookmarked ? 'text-primary-500 hover:text-primary-500' : ''"
-              @click="handleBookmark" />
+          <div class="space-x-5 text-neutral-500 transform duration-500 mt-1.5">
             <UIcon
               name="hugeicons:share-05"
-              class="size-[22px] sm:size-5 hover:text-neutral-300 cursor-pointer"
+              class="size-5 hover:text-neutral-300 cursor-pointer"
               @click="shareButton(post.title, post.summary)" />
           </div>
         </div>
       </div>
 
       <div class="pb-5">
-        <div class="mt-5">{{ post.summary ?? "" }}</div>
-
         <Suspense>
           <template #default>
             <MDC
@@ -40,32 +33,21 @@
           </template>
           <template #fallback>
             <div
-              class="flex flex-col justify-center items-center mt-12 space-y-3 text-primary-600/80">
+              class="flex flex-col justify-center items-center my-12 space-y-3 text-primary-600/80">
               <UIcon
                 name="svg-spinners:blocks-shuffle-3"
-                class="size-9" />
+                class="size-8" />
             </div>
           </template>
         </Suspense>
       </div>
 
-      <div class="flex justify-around sm:justify-center items-end m-5 text-neutral-500 transform duration-500">
-        <UIcon
-          :name="isBookmarked ? 'hugeicons:bookmark-check-02' : 'hugeicons:bookmark-02'"
-          class="size-6 sm:size-5 hover:text-neutral-300 cursor-pointer mb-1 block sm:hidden"
-          :class="isBookmarked ? 'text-primary-500 hover:text-primary-500' : ''"
-          @click="handleBookmark" />
-
+      <div class="m-5">
         <CommonLike
           :id="post.id"
           type="post"
           icon="hugeicons:clapping-02"
           size="28" />
-
-        <UIcon
-          name="hugeicons:share-05"
-          class="size-6 sm:size-5 hover:text-neutral-300 cursor-pointer mb-1 block sm:hidden"
-          @click="shareButton(post.title, post.summary)" />
       </div>
 
       <div v-if="post.allowComment">
@@ -109,7 +91,6 @@ const {
     fields: [
       "id",
       "title",
-      "summary",
       "content",
       "authors.*.*",
       "allowComment",
@@ -125,7 +106,6 @@ onMounted(async () => {
       fields: [
         "id",
         "title",
-        "summary",
         "content",
         "authors.*.*",
         "allowComment",
@@ -178,12 +158,6 @@ const shareButton = (title: string, text: string) => {
       color: "warning",
     });
   }
-};
-
-const isBookmarked = ref(false);
-
-const handleBookmark = () => {
-  isBookmarked.value = !isBookmarked.value;
 };
 
 useSeoMeta({

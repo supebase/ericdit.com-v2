@@ -1,7 +1,7 @@
 <template>
   <div v-if="userId">
     <form @submit.prevent="postComment">
-      <div class="ring-2 ring-neutral-200 dark:ring-neutral-800 bg-neutral-50/60 dark:bg-neutral-950/60 rounded-lg p-1">
+      <div class="ring-2 ring-neutral-200 dark:ring-neutral-800 bg-neutral-50/60 dark:bg-neutral-950/60 rounded-lg p-1.5">
         <UTextarea
           ref="commentInput"
           color="neutral"
@@ -29,7 +29,7 @@
               class="transform duration-500 ease-in-out"
               :class="!isValid ? 'translate-x-0 opacity-100' : '-translate-x-3 opacity-0'" />
           </div>
-          <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-6">
             <span
               class="text-sm select-none"
               :class="isExceedLimit ? 'text-red-600' : 'text-neutral-400 dark:text-neutral-600'">
@@ -40,7 +40,7 @@
               :color="canSubmit ? 'primary' : 'neutral'"
               size="lg"
               variant="ghost"
-              class="hover:!bg-transparent cursor-pointer"
+              class="hover:!bg-transparent cursor-pointer px-0"
               :loading="loading"
               :icon="submitIcon"
               :disabled="!canSubmit" />
