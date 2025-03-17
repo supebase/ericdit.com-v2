@@ -8,63 +8,53 @@
         <section
           v-for="year in sortedYears"
           :key="year">
-          <div class="relative select-none h-16 -z-10">
+          <div class="relative select-none h-14 -z-10">
             <span
-              class="absolute top-7 -left-4 sm:-left-8 text-8xl text-transparent opacity-5 font-bold year"
+              orientation="vertical"
+              class="absolute top-9 sm:top-29 -left-1 sm:-left-38 sm:-rotate-90 text-7xl sm:text-5xl text-transparent opacity-10 font-bold year"
               >{{ year }}</span
             >
           </div>
           <article
-            v-for="post in groupedPosts[year]"
+            v-for="(post, index) in groupedPosts[year]"
             :key="post.id"
-            class="relative flex justify-between py-3 sm:py-5">
-            <UBadge
-              v-if="post.tag"
-              :label="post.tag.name"
-              color="neutral"
-              variant="soft"
-              class="absolute top-[22px] -left-14 opacity-65 select-none hidden sm:block" />
-            <div class="flex space-x-4">
+            class="py-5">
+            <hr
+              v-if="index > 0"
+              class="mb-4 -mt-5" />
+            <div class="flex first:pt-0 last:pb-0 relative">
               <div>
-                <ULink
-                  :to="`/posts/${post.id}`"
-                  class="text-lg font-semibold select-none">
-                  <div class="glow-link w-fit">
-                    <span class="line-clamp-1">{{ post.title }}</span>
+                <UBadge
+                  v-if="post.tag"
+                  :label="post.tag.name"
+                  color="neutral"
+                  variant="soft"
+                  class="absolute top-0.5 -left-13 opacity-65 select-none hidden sm:block" />
+                <div class="flex space-x-3">
+                  <ULink
+                    :to="`/posts/${post.id}`"
+                    class="text-lg font-semibold select-none">
+                    <div class="glow-link w-fit">
+                      <span class="line-clamp-1">{{ post.title }}</span>
+                    </div>
+                  </ULink>
+                  <div
+                    class="items-center text-neutral-400 dark:text-neutral-600 text-sm select-none space-x-4 hidden sm:block">
+                    <div v-if="post.images?.length">
+                      <UIcon
+                        name="hugeicons:image-01"
+                        class="size-[18px] mt-[5px] text-primary-500" />
+                    </div>
+                    <CommentsCount
+                      :postId="post.id"
+                      :allowComment="post.allowComment" />
                   </div>
-                </ULink>
-                <div
-                  class="flex items-center space-x-3 mt-1 sm:mt-0 text-sm text-neutral-400 dark:text-neutral-600">
-                  <div class="sm:hidden">{{ useDatetime(post.date_created) }}</div>
-                  <div class="sm:hidden text-neutral-300 dark:text-neutral-700">&bull;</div>
-                  <div class="sm:hidden">{{ useReadingTime(post.content) }}</div>
-                  <UBadge
-                    v-if="post.tag"
-                    :label="post.tag.name"
-                    color="neutral"
-                    variant="soft"
-                    class="opacity-65 select-none block sm:hidden" />
                 </div>
                 <div
-                  class="mt-1 text-sm text-neutral-400 dark:text-neutral-600 select-none hidden sm:line-clamp-1 absolute max-w-md">
-                  {{ post.summary }}
+                  class="mt-1 text-sm text-neutral-300 dark:text-neutral-700 select-none line-clamp-1">
+                  {{ useDatetime(post.date_created) }}：{{ post.summary }}
                 </div>
               </div>
-              <div
-                class="items-center text-neutral-400 dark:text-neutral-600 text-sm select-none space-x-2 hidden sm:block">
-                <div v-if="post.images?.length">
-                  <UIcon
-                    name="hugeicons:image-01"
-                    class="size-[18px] mt-[5px] text-primary-500" />
-                </div>
-                <CommentsCount
-                  :postId="post.id"
-                  :allowComment="post.allowComment" />
-              </div>
-            </div>
-            <div
-              class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-1 hidden sm:block">
-              {{ useDatetime(post.date_created) }}
             </div>
           </article>
         </section>

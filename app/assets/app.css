@@ -190,7 +190,7 @@ hr {
   background-image: linear-gradient(
     to right,
     rgba(113, 113, 122, 0),
-    rgba(113, 113, 122, 0.45),
+    rgba(113, 113, 122, 0.25),
     rgba(113, 113, 122, 0)
   );
 }

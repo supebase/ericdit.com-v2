@@ -2,7 +2,7 @@
   <div class="eric">
     <svg
       width="197"
-      height="150"
+      height="180"
       viewBox="0 0 197 150"
       fill="none"
       xmlns="http://www.w3.org/2000/svg">

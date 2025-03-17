@@ -4,7 +4,7 @@
       <PostsLoading />
     </div>
     <template v-else-if="post">
-      <div class="h-10"></div>
+      <div class="h-11"></div>
       <div class="flex flex-col space-y-4">
         <div class="text-xl sm:text-2xl font-bold">{{ post.title }}</div>
 
