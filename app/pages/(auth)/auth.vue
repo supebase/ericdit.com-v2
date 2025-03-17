@@ -17,6 +17,7 @@
             <UInput
               v-model="email"
               variant="outline"
+              color="neutral"
               size="xl"
               icon="hugeicons:at"
               class="w-full"
@@ -25,6 +26,7 @@
             <UInput
               v-model="password"
               variant="outline"
+              color="neutral"
               size="xl"
               icon="hugeicons:lock-key"
               class="w-full"
@@ -36,6 +38,7 @@
                   color="neutral"
                   variant="link"
                   size="md"
+                  tabindex="-1"
                   :icon="show.login ? 'hugeicons:view-off' : 'hugeicons:view'"
                   @click="show.login = !show.login" />
               </template>
@@ -46,24 +49,27 @@
             v-else
             class="flex flex-col gap-4">
             <UInput
-              v-model="name"
-              variant="outline"
-              size="xl"
-              icon="hugeicons:user-square"
-              @blur="handleFocus"
-              placeholder="你的名字"
-              class="w-full" />
-            <UInput
               v-model="newEmail"
               variant="outline"
+              color="neutral"
               size="xl"
               icon="hugeicons:at"
               @blur="handleFocus"
               placeholder="电子邮件"
               class="w-full" />
             <UInput
+              v-model="name"
+              variant="outline"
+              color="neutral"
+              size="xl"
+              icon="hugeicons:user-square"
+              @blur="handleFocus"
+              placeholder="你的名字"
+              class="w-full" />
+            <UInput
               v-model="newPassword"
               variant="outline"
+              color="neutral"
               size="xl"
               icon="hugeicons:square-lock-add-02"
               :type="show.register ? 'text' : 'password'"
@@ -71,10 +77,17 @@
               placeholder="输入密码"
               class="w-full">
               <template #trailing>
+                <UChip
+                  standalone
+                  inset
+                  :color="strengthColor"
+                  :show="!!newPassword"
+                  class="mr-2" />
                 <UButton
                   color="neutral"
                   variant="link"
                   size="md"
+                  tabindex="-1"
                   :icon="show.register ? 'hugeicons:view-off' : 'hugeicons:view'"
                   @click="show.register = !show.register" />
               </template>
@@ -82,6 +95,7 @@
             <UInput
               v-model="confirmPassword"
               variant="outline"
+              color="neutral"
               size="xl"
               icon="hugeicons:square-lock-check-02"
               :type="show.confirm ? 'text' : 'password'"
@@ -93,6 +107,7 @@
                   color="neutral"
                   variant="link"
                   size="md"
+                  tabindex="-1"
                   :icon="show.confirm ? 'hugeicons:view-off' : 'hugeicons:view'"
                   @click="show.confirm = !show.confirm" />
               </template>
@@ -183,11 +198,28 @@ onMounted(async () => {
 
 onDeactivated(() => {
   clearInputs();
-})
+});
 
 const handleFocus = (event: FocusEvent) => {
   (event.target as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
 };
+
+const requirements = [{ regex: /.{8,}/ }, { regex: /\d/ }, { regex: /[a-z]/ }, { regex: /[A-Z]/ }];
+
+const strength = computed(() =>
+  requirements.map((req) => ({ ...req, met: req.regex.test(newPassword.value) }))
+);
+
+const score = computed(() => strength.value.filter((req) => req.met).length);
+
+const strengthColor = computed(() => {
+  return ["neutral", "error", "warning", "warning", "success"][score.value] as
+    | "neutral"
+    | "error"
+    | "warning"
+    | "success"
+    | undefined;
+});
 
 useSeoMeta({ title: "登录或注册" });
 </script>

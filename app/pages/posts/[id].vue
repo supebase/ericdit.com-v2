@@ -18,10 +18,40 @@
           <div class="space-x-5 text-neutral-500 transform duration-500 mt-1.5">
             <UIcon
               name="hugeicons:share-05"
-              class="size-5 hover:text-neutral-300 cursor-pointer"
+              class="size-5 hover:text-neutral-700 dark:hover:text-neutral-300 cursor-pointer"
               @click="shareButton(post.title, post.summary)" />
           </div>
         </div>
+      </div>
+
+      <div
+        class="py-8"
+        v-if="post.images?.length">
+        <div
+          v-if="isLoading"
+          class="flex justify-center items-center h-[274px]">
+          <UIcon
+            name="svg-spinners:90-ring-with-bg"
+            class="size-8 text-primary-500" />
+        </div>
+
+        <UCarousel
+          v-else
+          v-slot="{ item }: { item: { directus_files_id: string } }"
+          class-names
+          wheel-gestures
+          dots
+          :items="post.images"
+          :ui="{
+            item: 'basis-[85%] transition-opacity [&:not(.is-snapped)]:opacity-20 duration-500',
+            dot: 'w-6 h-1',
+          }"
+          class="mx-auto">
+          <img
+            :src="useAssets(item.directus_files_id)"
+            class="rounded-lg"
+            @load="onImageLoad" />
+        </UCarousel>
       </div>
 
       <div class="pb-5">
@@ -35,7 +65,7 @@
             <div
               class="flex flex-col justify-center items-center my-12 space-y-3 text-primary-600/80">
               <UIcon
-                name="svg-spinners:blocks-shuffle-3"
+                name="svg-spinners:blocks-wave"
                 class="size-8" />
             </div>
           </template>
@@ -47,7 +77,7 @@
           :id="post.id"
           type="post"
           icon="hugeicons:clapping-02"
-          size="28" />
+          size="32" />
       </div>
 
       <div v-if="post.allowComment">
@@ -93,6 +123,7 @@ const {
       "title",
       "content",
       "authors.*.*",
+      "images.*",
       "allowComment",
       "date_created",
       "date_updated",
@@ -108,6 +139,7 @@ onMounted(async () => {
         "title",
         "content",
         "authors.*.*",
+        "images.*",
         "allowComment",
         "date_created",
         "date_updated",
@@ -157,6 +189,35 @@ const shareButton = (title: string, text: string) => {
       icon: "hugeicons:delete-04",
       color: "warning",
     });
+  }
+};
+
+const isLoading = ref(true);
+const imagesLoaded = ref(0);
+
+watchEffect(() => {
+  if (post.value?.images?.length) {
+    imagesLoaded.value = 0;
+    isLoading.value = true;
+
+    Promise.all(
+      post.value.images.map(({ directus_files_id }) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = useAssets(directus_files_id) || "";
+          img.onload = () => resolve(true);
+        });
+      })
+    ).then(() => {
+      isLoading.value = false;
+    });
+  }
+});
+
+const onImageLoad = () => {
+  imagesLoaded.value += 1;
+  if (imagesLoaded.value === post.value?.images?.length) {
+    isLoading.value = false;
   }
 };
 

@@ -85,6 +85,16 @@ export function useAuth() {
       return;
     }
 
+    if (!validateEmail(newEmail)) {
+      toast.add({
+        title: "注册提示",
+        description: "电子邮件地址格式不正确，请检查。",
+        icon: "hugeicons:alert-02",
+        color: "warning",
+      });
+      return;
+    }
+
     const isChinese = /[\u4e00-\u9fa5]/.test(name);
     const maxLength = isChinese ? 8 : 20;
     if (isChinese && name.length < 2) {
@@ -114,10 +124,23 @@ export function useAuth() {
       return;
     }
 
-    if (!validateEmail(newEmail)) {
+    const specialCharPattern = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/;
+    const isPureNumber = /^[0-9]+$/.test(name);
+
+    if (!specialCharPattern.test(name)) {
       toast.add({
         title: "注册提示",
-        description: "电子邮件地址格式不正确，请检查。",
+        description: "名字不能包含特殊字符，请检查并修改。",
+        icon: "hugeicons:alert-02",
+        color: "warning",
+      });
+      return;
+    }
+
+    if (isPureNumber) {
+      toast.add({
+        title: "注册提示",
+        description: "名字至少含一个字母或汉字，不能仅纯数字。",
         icon: "hugeicons:alert-02",
         color: "warning",
       });
@@ -146,6 +169,41 @@ export function useAuth() {
 
     try {
       loading.value = true;
+
+      const existingUser = await $authClient.request(
+        $user.readUsers({
+          filter: { email: { _eq: newEmail } },
+        })
+      );
+
+      if (existingUser.length > 0) {
+        toast.add({
+          title: "注册提示",
+          description: "该电子邮件已被注册，请使用其他电子邮件。",
+          icon: "hugeicons:alert-02",
+          color: "warning",
+        });
+        loading.value = false;
+        return;
+      }
+
+      const existingNameUser = await $authClient.request(
+        $user.readUsers({
+          filter: { first_name: { _eq: name.toLowerCase() } },
+        })
+      );
+
+      if (existingNameUser.length > 0) {
+        toast.add({
+          title: "注册提示",
+          description: "该名字已被使用，请选择其他名字。",
+          icon: "hugeicons:alert-02",
+          color: "warning",
+        });
+        loading.value = false;
+        return;
+      }
+
       await $authClient.request(
         $user.registerUser(newEmail, confirmPassword, {
           first_name: name,

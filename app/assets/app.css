@@ -7,21 +7,21 @@
 
 :root {
   --ui-radius: 0.5rem;
-  --scrollbar-track: oklch(0.22 0 0);
-  --scrollbar-thumb: oklch(0.25 0 0);
-  --scrollbar-thumb-hover: oklch(0.269 0 0);
+  --scrollbar-track: var(--color-neutral-50);
+  --scrollbar-thumb: var(--color-neutral-50);
+  --scrollbar-thumb-hover: var(--color-neutral-50);
 }
 
 .light {
-  --scrollbar-track: oklch(0.96 0 0);
-  --scrollbar-thumb: oklch(0.9 0 0);
-  --scrollbar-thumb-hover: oklch(0.8 0 0);
+  --scrollbar-track: var(--color-neutral-100);
+  --scrollbar-thumb: var(--color-neutral-200);
+  --scrollbar-thumb-hover: var(--color-neutral-300);
 }
 
 .dark {
-  --scrollbar-track: oklch(0.22 0 0);
-  --scrollbar-thumb: oklch(0.25 0 0);
-  --scrollbar-thumb-hover: oklch(0.269 0 0);
+  --scrollbar-track: var(--color-neutral-800);
+  --scrollbar-thumb: var(--color-neutral-700);
+  --scrollbar-thumb-hover: var(--color-neutral-900);
 }
 
 html {

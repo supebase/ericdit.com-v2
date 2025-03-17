@@ -45,15 +45,21 @@
                     variant="soft"
                     class="opacity-65 select-none block sm:hidden" />
                 </div>
-                <div class="mt-1 text-sm text-neutral-400 dark:text-neutral-600 select-none hidden sm:line-clamp-1 absolute max-w-md">
+                <div
+                  class="mt-1 text-sm text-neutral-400 dark:text-neutral-600 select-none hidden sm:line-clamp-1 absolute max-w-md">
                   {{ post.summary }}
                 </div>
               </div>
-              <div class="text-neutral-400 dark:text-neutral-600 text-sm select-none mt-0.5">
+              <div
+                class="items-center text-neutral-400 dark:text-neutral-600 text-sm select-none space-x-2 hidden sm:block">
+                <div v-if="post.images?.length">
+                  <UIcon
+                    name="hugeicons:image-01"
+                    class="size-[18px] mt-[5px] text-primary-500" />
+                </div>
                 <CommentsCount
                   :postId="post.id"
-                  :allowComment="post.allowComment"
-                  class="text-sm" />
+                  :allowComment="post.allowComment" />
               </div>
             </div>
             <div
@@ -89,6 +95,7 @@ const {
       "summary",
       "content",
       "tag.*",
+      "images",
       "allowComment",
       "date_created",
       "date_updated",
@@ -123,6 +130,7 @@ onMounted(async () => {
         "summary",
         "content",
         "tag.*",
+        "images",
         "allowComment",
         "date_created",
         "date_updated",

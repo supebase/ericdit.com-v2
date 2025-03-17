@@ -7,15 +7,18 @@
         v-if="props.isComment" />
     </div>
     <span v-else-if="props.allowComment">
-      <UKbd v-if="commentList.length > 0 && !props.isComment" size="sm">{{
-        commentList.length > 0 ? `${commentList.length}` : ""
-      }}</UKbd>
+      <UKbd
+        v-if="commentList.length > 0 && !props.isComment"
+        size="sm"
+        class="mt-1.5"
+        >{{ commentList.length > 0 ? `${commentList.length}` : "" }}</UKbd
+      >
       <span v-else>{{ commentList.length > 0 ? `${commentList.length} 条评论` : "" }}</span>
     </span>
     <span v-else>
       <UIcon
         name="hugeicons:comment-block-02"
-        class="size-5 mt-[1px]" />
+        class="size-[18px] mt-[5px] text-orange-500" />
     </span>
   </div>
 </template>

@@ -6,7 +6,7 @@
       v-if="loading"
       name="svg-spinners:ring-resize"
       class="text-neutral-500"
-      :class="type === 'post' ? 'order-1 size-7 mx-auto' : 'order-0 size-[46px]'" />
+      :class="type === 'post' ? 'order-1 size-8 mx-auto' : 'order-0 size-[46px]'" />
     <UIcon
       v-else
       :name="iconName"

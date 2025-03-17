@@ -1,16 +1,22 @@
 <template>
-  <USkeleton
-    class="h-9 w-9 rounded-full"
-    v-if="authStore.isLoading" />
-
   <ULink
     to="/account"
-    v-else-if="authStore.isLoggedIn">
+    v-if="authStore.isLoggedIn">
     <UAvatar
-      :src="`${useAssets(authStore.user?.avatar || '')}`"
+      :src="avatarLoaded ? userAvatar : undefined"
       :alt="authStore.user?.first_name"
-      class="ring-2 ring-neutral-200 dark:ring-neutral-800"
-      size="lg" />
+      class="relative ring-2 ring-neutral-200 dark:ring-neutral-800"
+      size="lg">
+      <template #default>
+        <div
+          v-if="!avatarLoaded"
+          class="absolute inset-0 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-full">
+          <UIcon
+            name="svg-spinners:90-ring-with-bg"
+            class="size-6 text-neutral-500" />
+        </div>
+      </template>
+    </UAvatar>
   </ULink>
 
   <ULink
@@ -24,4 +30,18 @@
 
 <script setup lang="ts">
 const authStore = useAuthStore();
+const avatarLoaded = ref(false);
+const userAvatar = ref("");
+
+watchEffect(() => {
+  if (authStore.isLoggedIn && authStore.user?.avatar) {
+    avatarLoaded.value = false;
+    const img = new Image();
+    img.src = useAssets(authStore.user.avatar) || "";
+    img.onload = () => {
+      userAvatar.value = img.src;
+      avatarLoaded.value = true;
+    };
+  }
+});
 </script>

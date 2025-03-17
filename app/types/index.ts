@@ -18,6 +18,7 @@ export interface Post {
   content: string;
   tag?: Tag;
   authors?: Author[];
+  images?: [],
   allowComment: boolean;
   date_created: string;
   date_updated: string | null;

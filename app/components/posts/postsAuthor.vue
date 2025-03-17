@@ -5,11 +5,22 @@
     <div class="group flex items-center">
       <UAvatarGroup>
         <UAvatar
-          size="xl"
-          :src="`${useAssets(author.authors_id.avatar)}`"
-          :alt="author.authors_id.name"
           v-for="author in authors"
-          :key="author.authors_id.id" />
+          :key="author.authors_id.id"
+          size="xl"
+          :src="authorAvatars[author.authors_id.id]"
+          :alt="author.authors_id.name"
+          class="relative">
+          <template #default>
+            <div
+              v-if="!avatarLoaded[author.authors_id.id]"
+              class="absolute inset-0 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-full">
+              <UIcon
+                name="svg-spinners:90-ring-with-bg"
+                class="size-6 text-neutral-500" />
+            </div>
+          </template>
+        </UAvatar>
       </UAvatarGroup>
       <div class="ml-4">
         <p class="font-medium text-neutral-800 dark:text-neutral-200 select-none">
@@ -41,10 +52,27 @@
 <script setup lang="ts">
 import type { Author } from "~/types";
 
-defineProps<{
+const props = defineProps<{
   authors?: Author[];
   date: string;
   read: string;
   updated: string | null;
 }>();
+
+const authorAvatars = ref<Record<string, string>>({});
+const avatarLoaded = ref<Record<string, boolean>>({});
+
+watchEffect(() => {
+  if (props.authors?.length) {
+    props.authors.forEach((author) => {
+      avatarLoaded.value[author.authors_id.id] = false;
+      const img = new Image();
+      img.src = useAssets(author.authors_id.avatar) || "";
+      img.onload = () => {
+        authorAvatars.value[author.authors_id.id] = img.src;
+        avatarLoaded.value[author.authors_id.id] = true;
+      };
+    });
+  }
+});
 </script>
