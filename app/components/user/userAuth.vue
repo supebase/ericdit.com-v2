@@ -19,13 +19,17 @@
     </UAvatar>
   </ULink>
 
-  <ULink
-    to="/auth"
+  <UTooltip
+    arrow
+    :delay-duration="0"
+    text="登录或注册"
     v-else>
-    <UAvatar
-      icon="hugeicons:lock-key"
-      size="lg" />
-  </ULink>
+    <ULink to="/auth">
+      <UAvatar
+        icon="hugeicons:lock-key"
+        size="lg" />
+    </ULink>
+  </UTooltip>
 </template>
 
 <script setup lang="ts">

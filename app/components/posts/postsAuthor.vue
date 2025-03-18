@@ -8,12 +8,12 @@
           v-for="author in authors"
           :key="author.authors_id.id"
           size="xl"
-          :src="authorAvatars[author.authors_id.id]"
+          :src="authorsAvatars[author.authors_id.id]?.imageSrc.value"
           :alt="author.authors_id.name"
           class="relative">
           <template #default>
             <div
-              v-if="!avatarLoaded[author.authors_id.id]"
+              v-if="!authorsAvatars[author.authors_id.id]?.loaded.value"
               class="absolute inset-0 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-full">
               <UIcon
                 name="svg-spinners:90-ring-with-bg"
@@ -59,20 +59,11 @@ const props = defineProps<{
   updated: string | null;
 }>();
 
-const authorAvatars = ref<Record<string, string>>({});
-const avatarLoaded = ref<Record<string, boolean>>({});
-
-watchEffect(() => {
-  if (props.authors?.length) {
-    props.authors.forEach((author) => {
-      avatarLoaded.value[author.authors_id.id] = false;
-      const img = new Image();
-      img.src = useAssets(author.authors_id.avatar) || "";
-      img.onload = () => {
-        authorAvatars.value[author.authors_id.id] = img.src;
-        avatarLoaded.value[author.authors_id.id] = true;
-      };
-    });
-  }
+const authorsAvatars = computed(() => {
+  if (!props.authors) return {};
+  return props.authors.reduce((acc, author) => {
+    acc[author.authors_id.id] = useImageLoader(useAssets(author.authors_id.avatar));
+    return acc;
+  }, {} as Record<string, ReturnType<typeof useImageLoader>>);
 });
 </script>

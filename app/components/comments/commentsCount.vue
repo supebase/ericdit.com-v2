@@ -7,18 +7,28 @@
         v-if="props.isComment" />
     </div>
     <span v-else-if="props.allowComment">
-      <UKbd
-        v-if="commentList.length > 0 && !props.isComment"
-        size="sm"
-        class="mt-1.5"
-        >{{ commentList.length > 0 ? `${commentList.length}` : "" }}</UKbd
-      >
+      <UTooltip
+        arrow
+        :delay-duration="0"
+        :text="`${commentList.length} 条评论`"
+        v-if="commentList.length > 0 && !props.isComment">
+        <UKbd
+          size="sm"
+          class="mt-1.5"
+          >{{ commentList.length > 0 ? `${commentList.length}` : "" }}</UKbd
+        >
+      </UTooltip>
       <span v-else>{{ commentList.length > 0 ? `${commentList.length} 条评论` : "" }}</span>
     </span>
     <span v-else>
-      <UIcon
-        name="hugeicons:comment-block-02"
-        class="size-[18px] mt-[5px] text-orange-500" />
+      <UTooltip
+        arrow
+        :delay-duration="0"
+        text="评论已关闭">
+        <UIcon
+          name="hugeicons:comment-block-02"
+          class="size-[18px] mt-[5px] text-orange-500" />
+      </UTooltip>
     </span>
   </div>
 </template>

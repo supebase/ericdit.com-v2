@@ -47,16 +47,5 @@ import type { User } from "~/types";
 const authStore = useAuthStore();
 const props = defineProps<{ user: User; date: string; commentId: number }>();
 
-const avatarLoaded = ref(false);
-const userAvatar = ref("");
-
-watchEffect(() => {
-  avatarLoaded.value = false;
-  const img = new Image();
-  img.src = useAssets(props.user.avatar) || "";
-  img.onload = () => {
-    userAvatar.value = img.src;
-    avatarLoaded.value = true;
-  };
-});
+const { loaded: avatarLoaded, imageSrc: userAvatar } = useImageLoader(useAssets(props.user.avatar));
 </script>

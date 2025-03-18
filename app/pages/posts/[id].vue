@@ -16,10 +16,15 @@
             :updated="post.date_updated" />
 
           <div class="space-x-5 text-neutral-500 transform duration-500 mt-1.5">
-            <UIcon
-              name="hugeicons:share-05"
-              class="size-5 hover:text-neutral-700 dark:hover:text-neutral-300 cursor-pointer"
-              @click="shareButton(post.title, post.summary)" />
+            <UTooltip
+              arrow
+              :delay-duration="0"
+              text="分享互联网">
+              <UIcon
+                name="hugeicons:share-05"
+                class="size-5 hover:text-neutral-700 dark:hover:text-neutral-300 cursor-pointer"
+                @click="shareButton(post.title, post.summary)" />
+            </UTooltip>
           </div>
         </div>
       </div>
@@ -38,12 +43,13 @@
         <UCarousel
           v-else
           v-slot="{ item }: { item: { directus_files_id: string } }"
+          autoplay
           class-names
           wheel-gestures
           dots
           :items="post.images"
           :ui="{
-            item: 'basis-[85%] transition-opacity [&:not(.is-snapped)]:opacity-20 duration-500',
+            item: 'basis-[85%] transition-opacity [&:not(.is-snapped)]:opacity-40 duration-500',
             dot: 'w-6 h-1',
           }"
           class="mx-auto">

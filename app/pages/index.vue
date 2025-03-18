@@ -41,17 +41,21 @@
                   <div
                     class="items-center text-neutral-400 dark:text-neutral-600 text-sm select-none space-x-4 hidden sm:block">
                     <div v-if="post.images?.length">
-                      <UIcon
-                        name="hugeicons:image-01"
-                        class="size-[18px] mt-[5px] text-primary-500" />
+                      <UTooltip
+                        arrow
+                        :delay-duration="0"
+                        text="多图轮播">
+                        <UIcon
+                          name="hugeicons:image-01"
+                          class="size-[18px] mt-[5px] text-primary-500" />
+                      </UTooltip>
                     </div>
                     <CommentsCount
                       :postId="post.id"
                       :allowComment="post.allowComment" />
                   </div>
                 </div>
-                <div
-                  class="mt-1 text-sm text-neutral-300 dark:text-neutral-700 select-none line-clamp-1">
+                <div class="mt-1 text-sm text-neutral-300 dark:text-neutral-700 select-none">
                   {{ useDatetime(post.date_created) }}：{{ post.summary }}
                 </div>
               </div>
