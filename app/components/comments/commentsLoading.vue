@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center w-xs mx-auto">
+  <div class="flex justify-center items-center w-[200px] mx-auto">
     <UProgress animation="carousel" size="sm" />
   </div>
 </template>

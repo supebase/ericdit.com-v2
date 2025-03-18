@@ -4,26 +4,26 @@
       <UIcon
         name="svg-spinners:3-dots-scale"
         class="size-[15px] text-neutral-400 dark:text-neutral-600"
-        v-if="props.isComment" />
+        v-if="isComment" />
     </div>
-    <span v-else-if="props.allowComment">
+    <span v-else-if="allowComment">
       <UTooltip
         arrow
-        :delay-duration="0"
-        :text="`${commentList.length} 条评论`"
-        v-if="commentList.length > 0 && !props.isComment">
+        :delay-duration="50"
+        :text="`${commentCount} 条评论`"
+        v-if="hasComments && !isComment">
         <UKbd
           size="sm"
           class="mt-1.5"
-          >{{ commentList.length > 0 ? `${commentList.length}` : "" }}</UKbd
+          >{{ commentCount }}</UKbd
         >
       </UTooltip>
-      <span v-else>{{ commentList.length > 0 ? `${commentList.length} 条评论` : "" }}</span>
+      <span v-else>{{ hasComments ? `${commentCount} 条评论` : "" }}</span>
     </span>
     <span v-else>
       <UTooltip
         arrow
-        :delay-duration="0"
+        :delay-duration="50"
         text="评论已关闭">
         <UIcon
           name="hugeicons:comment-block-02"
@@ -71,4 +71,9 @@ onMounted(async () => {
 });
 
 const commentList = computed(() => comments.value ?? []);
+const commentCount = computed(() => commentList.value.length);
+const hasComments = computed(() => commentCount.value > 0);
+
+// 使用解构简化 props 的使用
+const { isComment, allowComment } = toRefs(props);
 </script>

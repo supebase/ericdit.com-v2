@@ -74,10 +74,21 @@
 </template>
 
 <script setup lang="ts">
+import type { Comment } from "~/types";
+
 const { fetchComments, subscribeToComments, subscribeToUsers } = useComments();
 const props = defineProps<{ postId: string; user: boolean }>();
 
 const showHiddenComments = ref(false);
+const sixMonthsAgo = computed(() => {
+  const date = new Date();
+  date.setMonth(date.getMonth() - 6);
+  return date;
+});
+
+const isVisibleComment = (comment: Comment) => {
+  return comment.comment.length >= 6 && new Date(comment.date_created) >= sixMonthsAgo.value;
+};
 
 const {
   data: comments,
@@ -91,41 +102,34 @@ const {
   });
 });
 
-// 计算可见评论（大于等于6字 & 6个月内）
-const visibleComments = computed(() => {
-  const sixMonthsAgo = new Date();
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-  return (
-    comments.value?.filter(
-      (comment) => comment.comment.length >= 6 && new Date(comment.date_created) >= sixMonthsAgo
-    ) || []
-  );
-});
+// 计算可见评论
+const visibleComments = computed(() => comments.value?.filter(isVisibleComment) || []);
 
-// 计算隐藏评论（少于6字 或 6个月前）
-const hiddenComments = computed(() => {
-  const sixMonthsAgo = new Date();
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-  return (
-    comments.value?.filter(
-      (comment) => comment.comment.length < 6 || new Date(comment.date_created) < sixMonthsAgo
-    ) || []
-  );
-});
+// 计算隐藏评论
+const hiddenComments = computed(
+  () => comments.value?.filter((comment) => !isVisibleComment(comment)) || []
+);
+
+// 统一处理订阅更新
+const handleSubscriptionUpdate = async () => {
+  await refresh();
+};
 
 onMounted(async () => {
+  // 订阅评论变化
   subscribeToComments(
     { fields: ["id", "comment", "date_created", "user_created.*"] },
     async (item) => {
       if (item.event === "create") {
-        await refresh();
+        await handleSubscriptionUpdate();
       }
     }
   );
 
+  // 订阅用户信息变化
   subscribeToUsers({ fields: ["avatar", "location"] }, async (item) => {
     if (item.event === "update") {
-      await refresh();
+      await handleSubscriptionUpdate();
     }
   });
 });

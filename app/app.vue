@@ -21,8 +21,10 @@ useLazyAsyncData(
   { server: true }
 );
 
-document.addEventListener("gesturestart", function (event) {
-  event.preventDefault();
+onMounted(() => {
+  document.addEventListener("gesturestart", (event: Event) => {
+    event.preventDefault();
+  });
 });
 
 useHead({

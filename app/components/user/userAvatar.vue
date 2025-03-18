@@ -57,28 +57,54 @@ const toast = useToast();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 
+// 定义上传配置
+const UPLOAD_CONFIG = {
+  maxSize: 1024 * 1024, // 1MB
+  allowedTypes: ["image/jpeg", "image/png", "image/gif"] as const,
+} as const;
+
+// 验证文件
+const validateFile = (file: File): boolean => {
+  if (
+    !UPLOAD_CONFIG.allowedTypes.includes(file.type as (typeof UPLOAD_CONFIG.allowedTypes)[number])
+  ) {
+    toast.add({
+      title: "上传通知",
+      description: "只支持 JPG、PNG 和 GIF 格式的图片",
+      icon: "hugeicons:alert-02",
+      color: "warning",
+    });
+    return false;
+  }
+
+  if (file.size > UPLOAD_CONFIG.maxSize) {
+    toast.add({
+      title: "上传通知",
+      description: "文件大小不能超过 1MB",
+      icon: "hugeicons:alert-02",
+      color: "warning",
+    });
+    return false;
+  }
+
+  return true;
+};
+
 const openFileInput = () => {
   fileInput.value?.click();
 };
 
 const handleFileUpload = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  if (target.files && target.files[0]) {
-    const uploadedFile = target.files[0];
-    if (
-      ["image/jpeg", "image/png", "image/gif"].includes(uploadedFile.type) &&
-      uploadedFile.size <= 1 * 1024 * 1024
-    ) {
-      uploadAvatar(target.files[0]);
-    } else {
-      toast.add({
-        title: "上传通知",
-        description: "文件格式不支持或文件大小超过 1 MB",
-        icon: "hugeicons:alert-02",
-        color: "warning",
-      });
-      return;
-    }
+  const file = target.files?.[0];
+
+  if (!file) return;
+
+  if (validateFile(file)) {
+    uploadAvatar(file);
   }
+
+  // 清理 input 值，允许上传相同文件
+  target.value = "";
 };
 </script>

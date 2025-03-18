@@ -7,7 +7,11 @@ import { createDirectus, rest, authentication, realtime } from "@directus/sdk";
  * @param autoRefresh 是否自动刷新令牌
  * @returns 配置好的客户端对象
  */
-export const createDirectusClient = (apiUrl: string, credentials: RequestCredentials = "include", autoRefresh: boolean = true) => {
+export const createDirectusClient = (
+  apiUrl: string,
+  credentials: RequestCredentials = "include",
+  autoRefresh: boolean = true
+) => {
   // 初始化基础客户端
   const baseClient = createDirectus(apiUrl).with(rest({ credentials }));
 
