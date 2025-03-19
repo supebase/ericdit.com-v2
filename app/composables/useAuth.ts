@@ -32,8 +32,8 @@ export function useAuth() {
       loading.value = true;
       const response = await $authClient.login(email, password);
       if (response) {
-        const locationData = await useLocationIP();
-        const userLocation = locationData.ipdata.info1;
+        const { location } = await useLocationIP();
+        const userLocation = location;
 
         const user = (await $authClient.request(
           $user.readMe({ fields: ["id", "email", "first_name", "avatar", "location"] })

@@ -18,12 +18,16 @@ useLazyAsyncData(
   async () => {
     await authStore.fetchUserData();
   },
-  { server: true }
+  { server: true, watch: [] }
 );
 
 onMounted(() => {
-  document.addEventListener("gesturestart", (event: Event) => {
-    event.preventDefault();
+  const preventGesture = (event: Event) => event.preventDefault();
+  document.addEventListener("gesturestart", preventGesture);
+
+  // 在组件卸载时移除事件监听
+  onUnmounted(() => {
+    document.removeEventListener("gesturestart", preventGesture);
   });
 });
 

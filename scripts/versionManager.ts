@@ -15,10 +15,21 @@ const PUBLIC_DIR = join(__dirname, "../public");
 const DEV_VERSION = "0.0.0-dev"; // 开发环境固定版本
 
 interface VersionData {
-  major: number;
-  minor: number;
-  patch: number;
+  readonly major: number;
+  readonly minor: number;
+  readonly patch: number;
 }
+
+enum VersionBumpType {
+  MAJOR = "major",
+  MINOR = "minor",
+  PATCH = "patch",
+}
+
+const VERSION_LIMITS = {
+  MINOR_MAX: 9,
+  PATCH_MAX: 9,
+} as const;
 
 export class VersionManager {
   private currentVersion: VersionData;
@@ -60,48 +71,58 @@ export class VersionManager {
     }
   }
 
-  public bumpVersion(type: "major" | "minor" | "patch" = "patch"): void {
+  private incrementMajor(version: VersionData): VersionData {
+    return {
+      major: version.major + 1,
+      minor: 0,
+      patch: 0,
+    };
+  }
+
+  private incrementMinor(version: VersionData): VersionData {
+    if (version.minor === VERSION_LIMITS.MINOR_MAX) {
+      return this.incrementMajor(version);
+    }
+    return {
+      ...version,
+      minor: version.minor + 1,
+      patch: 0,
+    };
+  }
+
+  private incrementPatch(version: VersionData): VersionData {
+    if (version.patch === VERSION_LIMITS.PATCH_MAX) {
+      return this.incrementMinor(version);
+    }
+    return {
+      ...version,
+      patch: version.patch + 1,
+    };
+  }
+
+  private saveVersion(): void {
+    writeFileSync(VERSION_FILE, this.versionString);
+  }
+
+  public bumpVersion(type: VersionBumpType = VersionBumpType.PATCH): void {
     if (!this.isProduction) {
       console.warn("Version bump is disabled in development mode");
       return;
     }
 
-    const newVersion = { ...this.currentVersion };
-
     switch (type) {
-      case "major":
-        newVersion.major += 1;
-        newVersion.minor = 0;
-        newVersion.patch = 0;
+      case VersionBumpType.MAJOR:
+        this.currentVersion = this.incrementMajor(this.currentVersion);
         break;
-      case "minor":
-        if (newVersion.minor === 9) {
-          newVersion.major += 1;
-          newVersion.minor = 0;
-          newVersion.patch = 0;
-        } else {
-          newVersion.minor += 1;
-          newVersion.patch = 0;
-        }
+      case VersionBumpType.MINOR:
+        this.currentVersion = this.incrementMinor(this.currentVersion);
         break;
-      case "patch":
-        if (newVersion.patch === 9) {
-          if (newVersion.minor === 9) {
-            newVersion.major += 1;
-            newVersion.minor = 0;
-            newVersion.patch = 0;
-          } else {
-            newVersion.minor += 1;
-            newVersion.patch = 0;
-          }
-        } else {
-          newVersion.patch += 1;
-        }
+      case VersionBumpType.PATCH:
+        this.currentVersion = this.incrementPatch(this.currentVersion);
         break;
     }
 
-    this.currentVersion = newVersion;
-    writeFileSync(VERSION_FILE, this.versionString);
+    this.saveVersion();
   }
 
   public generateVersionFile(): void {

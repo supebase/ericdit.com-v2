@@ -95,14 +95,37 @@ html {
   animation-delay: 2s;
 }
 
-.dark .year {
-  font-family: "Inter";
-  -webkit-text-stroke: 0.03em var(--color-neutral-50);
-}
-
 .year {
   font-family: "Inter";
   -webkit-text-stroke: 0.03em var(--color-neutral-950);
+  @apply absolute 
+         top-9 
+         sm:top-29 
+         -left-1 
+         sm:-left-38 
+         sm:-rotate-90 
+         text-7xl 
+         sm:text-5xl 
+         text-transparent 
+         opacity-10 
+         font-bold;
+}
+
+.dark .year {
+  -webkit-text-stroke: 0.03em var(--color-neutral-50);
+}
+
+.header {
+  @apply bg-white 
+           dark:bg-neutral-900 
+           p-8 
+           w-full 
+           fixed 
+           top-0 
+           z-50 
+           sm:z-0 
+           sm:p-0 
+           sm:bg-transparent;
 }
 
 .fade-enter-active,
@@ -178,6 +201,20 @@ html {
   width: 100%;
   left: 0;
   box-shadow: 0 0 8px var(--color-emerald-500);
+}
+
+.mdc-prose {
+  @apply prose-img:rounded-lg 
+         prose-pre:rounded-lg 
+         prose-pre:bg-neutral-100/80 
+         dark:prose-pre:bg-neutral-950/60 
+         prose-code:text-[0.8rem] 
+         prose-code:leading-[1.3rem] 
+         prose-a:text-primary-500 
+         prose-h3:prose-a:text-neutral-600 
+         dark:prose-h3:prose-a:text-neutral-300 
+         prose-h4:prose-a:text-neutral-600 
+         dark:prose-h4:prose-a:text-neutral-300;
 }
 
 textarea {

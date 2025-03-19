@@ -1,4 +1,16 @@
-import { registerUser, updateUser, readMe, readUsers, readItem, readItems, createItem, deleteItem, readFile, uploadFiles, deleteFile } from "@directus/sdk";
+import {
+  registerUser,
+  updateUser,
+  readMe,
+  readUsers,
+  readItem,
+  readItems,
+  createItem,
+  deleteItem,
+  readFile,
+  uploadFiles,
+  deleteFile,
+} from "@directus/sdk";
 
 export default defineNuxtPlugin(() => {
   const { directus, authClient, realtimeClient } = useDirectus();

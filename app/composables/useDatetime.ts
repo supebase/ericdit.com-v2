@@ -5,6 +5,7 @@ const messages: UseTimeAgoMessages = {
   past: (n) => {
     const timeMap: Record<string, string> = {
       "1 天": "昨天",
+      "2 天": "前天",
       "1 周": "上周",
       "1 个月": "上个月",
       "1 年": "去年",
@@ -22,6 +23,25 @@ const messages: UseTimeAgoMessages = {
   invalid: "无效的日期",
 };
 
-export function useDatetime(date: string | Date | number): ComputedRef<string> {
-  return computed(() => useTimeAgo(date, { messages }).value);
+export function useDatetime(date: string | Date | number | null): ComputedRef<string> {
+  return computed(() => {
+    if (!date) return messages.invalid;
+
+    try {
+      return useTimeAgo(date, {
+        messages,
+        max: "year" as const,
+        fullDateFormatter: (date) => {
+          return new Date(date).toLocaleDateString("zh-CN", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+        },
+      }).value;
+    } catch (error) {
+      console.error("Date formatting error:", error);
+      return messages.invalid;
+    }
+  });
 }

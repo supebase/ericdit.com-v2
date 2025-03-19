@@ -22,6 +22,6 @@ export default defineAppConfig({
     duration: 4000,
   },
   tooltip: {
-    delayDuration: 0,
+    delayDuration: 300,
   },
 });

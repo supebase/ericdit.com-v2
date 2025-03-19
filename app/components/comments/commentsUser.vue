@@ -3,7 +3,7 @@
     <UChip
       inset
       position="bottom-right"
-      :show="authStore.getUserOnlineStatus(user.id)">
+      :show="isOnline">
       <UAvatar
         size="lg"
         :src="avatarLoaded ? userAvatar : undefined"
@@ -44,8 +44,10 @@
 <script setup lang="ts">
 import type { User } from "~/types";
 
-const authStore = useAuthStore();
 const props = defineProps<{ user: User; date: string; commentId: number }>();
 
 const { loaded: avatarLoaded, imageSrc: userAvatar } = useImageLoader(useAssets(props.user.avatar));
+
+const onlineStatusStore = useOnlineStatusStore();
+const isOnline = computed(() => onlineStatusStore.getUserOnlineStatus(props.user.id));
 </script>

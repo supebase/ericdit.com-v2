@@ -21,7 +21,6 @@
 
   <UTooltip
     arrow
-    :delay-duration="0"
     text="登录或注册"
     v-else>
     <ULink to="/auth">

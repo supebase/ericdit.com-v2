@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-14 mt-12 sm:mt-0">
+  <main class="mb-14 mt-12 sm:mt-0">
     <div v-if="status === 'pending' && !posts">
       <PostsLoading />
     </div>
@@ -9,11 +9,7 @@
           v-for="year in sortedYears"
           :key="year">
           <div class="relative select-none h-14 -z-10">
-            <span
-              orientation="vertical"
-              class="absolute top-9 sm:top-29 -left-1 sm:-left-38 sm:-rotate-90 text-7xl sm:text-5xl text-transparent opacity-10 font-bold year"
-              >{{ year }}</span
-            >
+            <span class="year">{{ year }}</span>
           </div>
           <article
             v-for="(post, index) in groupedPosts[year]"
@@ -43,7 +39,6 @@
                     <div v-if="post.images?.length">
                       <UTooltip
                         arrow
-                        :delay-duration="0"
                         text="多图轮播">
                         <UIcon
                           name="hugeicons:image-01"
@@ -71,7 +66,7 @@
           icon="hugeicons:alert-02" />
       </template>
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">

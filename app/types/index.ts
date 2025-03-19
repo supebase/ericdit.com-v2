@@ -83,13 +83,13 @@ export interface CommentOptions {
   filter?: Record<string, any>;
 }
 
+export interface CommentFormProps {
+  postId: string;
+  userId: string | null;
+}
+
 export interface ImageLoaderReturn {
   loaded: Ref<boolean>;
   error: Ref<boolean>;
   imageSrc: Ref<string>;
-}
-
-export interface CommentFormProps {
-  postId: string;
-  userId: string | null;
 }

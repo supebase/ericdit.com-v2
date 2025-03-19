@@ -9,7 +9,6 @@
     <span v-else-if="allowComment">
       <UTooltip
         arrow
-        :delay-duration="50"
         :text="`${commentCount} 条评论`"
         v-if="hasComments && !isComment">
         <UKbd
@@ -23,7 +22,6 @@
     <span v-else>
       <UTooltip
         arrow
-        :delay-duration="50"
         text="评论已关闭">
         <UIcon
           name="hugeicons:comment-block-02"

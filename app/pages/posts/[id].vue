@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-14 mt-12 sm:mt-0">
+  <main class="mb-14 mt-12 sm:mt-0">
     <div v-if="status === 'pending' && !post">
       <PostsLoading />
     </div>
@@ -18,7 +18,6 @@
           <div class="space-x-5 text-neutral-500 transform duration-500 mt-1.5">
             <UTooltip
               arrow
-              :delay-duration="0"
               text="分享互联网">
               <UIcon
                 name="hugeicons:share-05"
@@ -54,7 +53,7 @@
           }"
           class="mx-auto">
           <img
-            :src="useAssets(item.directus_files_id)"
+            :src="useAssets(item.directus_files_id) || undefined"
             class="rounded-lg"
             @load="onImageLoad" />
         </UCarousel>
@@ -65,7 +64,7 @@
           <template #default>
             <MDC
               :value="post.content"
-              class="prose prose-img:rounded-lg prose-pre:rounded-lg prose-pre:bg-neutral-100/80 dark:prose-pre:bg-neutral-950/60 prose-code:text-[0.8rem] prose-code:leading-[1.3rem] prose-a:text-primary-500 prose-h3:prose-a:text-neutral-600 dark:prose-h3:prose-a:text-neutral-300 prose-h4:prose-a:text-neutral-600 dark:prose-h4:prose-a:text-neutral-300 dark:prose-invert" />
+              class="prose dark:prose-invert mdc-prose" />
           </template>
           <template #fallback>
             <div
@@ -105,7 +104,7 @@
         description="您要访问的页面暂时无法访问，可能是链接错误或页面已被删除。"
         icon="hugeicons:alert-02" />
     </template>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
