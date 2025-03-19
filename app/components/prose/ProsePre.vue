@@ -1,13 +1,12 @@
 <template>
   <div class="relative">
     <!-- 固定 Header -->
-    <div
-      class="absolute top-0 left-0 right-0 z-10 flex justify-between items-center p-3">
+    <div class="absolute top-0 left-0 right-0 z-10 flex justify-between items-center p-3">
       <div class="text-xs text-neutral-300 dark:text-neutral-700 select-none uppercase truncate">
         {{ $props.language }}
       </div>
       <div
-        @click="copy(source)"
+        @click="copyWithFeedback(source)"
         class="text-xs text-neutral-500 shrink-0">
         <span
           v-if="!copied"
@@ -89,8 +88,29 @@ const props = defineProps({
   },
 });
 
+const toast = useToast();
+
 const source = ref(props.code);
 const { copy, copied } = useClipboard({ source });
+
+const copyWithFeedback = async (text: string) => {
+  try {
+    await copy(text);
+    toast.add({
+      title: "复制成功",
+      description: "代码已复制到剪贴板。",
+      icon: "hugeicons:checkmark-circle-02",
+      color: "success",
+    });
+  } catch (err) {
+    toast.add({
+      title: "复制失败",
+      description: "请手动选择复制内容。",
+      icon: "hugeicons:alert-02",
+      color: "warning",
+    });
+  }
+};
 </script>
 
 <style>

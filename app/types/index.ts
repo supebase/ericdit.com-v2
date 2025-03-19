@@ -1,3 +1,9 @@
+import type { DirectusUser } from "@directus/sdk";
+
+export interface User extends DirectusUser {
+  online?: boolean;
+}
+
 /** 作者信息接口 */
 export interface Author {
   authors_id: {

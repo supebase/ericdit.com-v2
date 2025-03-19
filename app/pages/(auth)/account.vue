@@ -13,7 +13,9 @@
             <div class="text-2xl font-bold">{{ user?.first_name }}</div>
             <div class="text-sm text-neutral-500">{{ user?.email }}</div>
             <div class="text-sm text-neutral-500 mt-5 flex items-center space-x-2">
-              <UIcon name="hugeicons:location-04" class="size-5" />
+              <UIcon
+                name="hugeicons:location-04"
+                class="size-5" />
               <div>最近在{{ user?.location }}登录</div>
             </div>
           </div>
@@ -42,6 +44,7 @@ definePageMeta({ middleware: ["auth"] });
 
 const { $authClient } = useNuxtApp();
 const authStore = useAuthStore();
+const onlineStatusStore = useOnlineStatusStore();
 
 const user = computed(() => authStore.user);
 const loading = ref(false);
@@ -49,6 +52,10 @@ const loading = ref(false);
 const handleLogout = async () => {
   loading.value = true;
   try {
+    const userId = authStore.user?.id;
+    if (userId) {
+      await onlineStatusStore.handleLogout(userId);
+    }
     await $authClient.logout();
     authStore.clearUserData();
     navigateTo("/");

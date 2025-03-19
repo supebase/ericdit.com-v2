@@ -10,6 +10,7 @@ export class ActivityMonitor {
   private readonly onStatusChange: (status: boolean) => void;
   private readonly timeout: number;
   private readonly events: readonly string[];
+  private debounceTimeout: NodeJS.Timeout | null = null;
 
   constructor(onStatusChange: (status: boolean) => void, options: ActivityMonitorOptions = {}) {
     this.onStatusChange = onStatusChange;
@@ -17,14 +18,23 @@ export class ActivityMonitor {
     this.events = options.events || ACTIVITY_EVENTS;
   }
 
-  private resetTimer = () => {
-    if (this.timer) {
-      clearTimeout(this.timer);
+  private debounce(fn: () => void, delay: number) {
+    if (this.debounceTimeout) {
+      clearTimeout(this.debounceTimeout);
     }
-    this.onStatusChange(true);
-    this.timer = setTimeout(() => {
-      this.onStatusChange(false);
-    }, this.timeout);
+    this.debounceTimeout = setTimeout(fn, delay);
+  }
+
+  private resetTimer = () => {
+    this.debounce(() => {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.onStatusChange(true);
+      this.timer = setTimeout(() => {
+        this.onStatusChange(false);
+      }, this.timeout);
+    }, 250);
   };
 
   private handleVisibilityChange = () => {

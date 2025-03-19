@@ -3,7 +3,7 @@
     <UChip
       inset
       position="bottom-right"
-      :show="isOnline">
+      :color="isOnline ? 'primary' : 'neutral'">
       <UAvatar
         size="lg"
         :src="avatarLoaded ? userAvatar : undefined"
@@ -46,8 +46,22 @@ import type { User } from "~/types";
 
 const props = defineProps<{ user: User; date: string; commentId: number }>();
 
-const { loaded: avatarLoaded, imageSrc: userAvatar } = useImageLoader(useAssets(props.user.avatar));
+const { loaded: avatarLoaded, imageSrc: userAvatar } = useImageLoader(
+  props.user.avatar ? useAssets(props.user.avatar) : undefined
+);
 
 const onlineStatusStore = useOnlineStatusStore();
-const isOnline = computed(() => onlineStatusStore.getUserOnlineStatus(props.user.id));
+const isOnline = computed(() => onlineStatusStore.getUserOnlineStatus(props.user?.id || ""));
+
+onMounted(() => {
+  if (props.user?.id) {
+    onlineStatusStore.startMonitoring(props.user.id);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (props.user?.id) {
+    onlineStatusStore.stopMonitoring();
+  }
+});
 </script>

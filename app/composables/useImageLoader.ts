@@ -9,7 +9,12 @@ export function useImageLoader(src: string | undefined, timeout = 15000): ImageL
   let img: HTMLImageElement | null = null;
 
   watchEffect((onCleanup) => {
-    if (!src) return;
+    if (!src) {
+      loaded.value = true;
+      error.value = false;
+      imageSrc.value = "";
+      return;
+    }
 
     // 重置状态
     loaded.value = false;

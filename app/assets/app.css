@@ -7,9 +7,8 @@
 
 :root {
   --ui-radius: 0.5rem;
-  --scrollbar-track: var(--color-neutral-50);
-  --scrollbar-thumb: var(--color-neutral-50);
-  --scrollbar-thumb-hover: var(--color-neutral-50);
+  --animation-duration: 0.3s;
+  --animation-timing: ease;
 }
 
 .light {
@@ -130,7 +129,9 @@ html {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity var(--animation-duration) var(--animation-timing),
+    transform var(--animation-duration) var(--animation-timing);
+  will-change: opacity, transform;
 }
 
 .fade-enter-from,
@@ -238,16 +239,21 @@ hr {
   }
 }
 
+@media print {
+  .toc,
+  .header {
+    display: none;
+  }
+}
+
 /* TOC容器样式 */
 .toc {
-  width: 260px;
-  margin: 5px auto;
-  padding: 5px 0;
   position: fixed;
   top: 12%;
   left: calc(var(--spacing) * 10);
-  -webkit-user-select: none;
-  user-select: none;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* TOC标题样式 */

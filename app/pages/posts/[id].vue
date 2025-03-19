@@ -12,7 +12,7 @@
           <PostsAuthor
             :authors="post.authors"
             :date="post.date_created"
-            :read="useReadingTime(post.content)"
+            :read="useReadingTime(post.content, post.images)"
             :updated="post.date_updated" />
 
           <div class="space-x-5 text-neutral-500 transform duration-500 mt-1.5">

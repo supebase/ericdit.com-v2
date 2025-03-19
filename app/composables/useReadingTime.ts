@@ -1,20 +1,46 @@
-export function useReadingTime(content: string) {
-  const calculateReadingTime = (text: string): number => {
-    if (!text) return 0;
+export const useReadingTime = (content: string, images?: Array<{ directus_files_id: string }>) => {
+  // 英文阅读速度：每分钟200个单词
+  const WORDS_PER_MINUTE = 200;
+  // 中文阅读速度：每分钟300个汉字
+  const CHINESE_CHARS_PER_MINUTE = 300;
+  // 每张图片预计阅读时间：0.25分钟
+  const IMAGE_TIME = 0.25;
+  // 轮播图组件基础时间：0.25分钟
+  const CAROUSEL_BASE_TIME = 0.25;
+  // 代码块基础阅读时间：0.3分钟
+  const CODE_BLOCK_BASE_TIME = 0.3;
+  // 每行代码额外阅读时间：0.07分钟
+  const CODE_LINE_TIME = 0.07;
 
-    // 统计英文单词（word），匹配英文单词、数字等
-    const words = text.match(/\b[a-zA-Z0-9']+\b/g) || [];
+  const calculateReadingTime = (content: string, imagesCount: number = 0) => {
+    if (!content) return 0;
 
-    // 统计中文字符（character），匹配中文字符
-    const characters = text.match(/[\p{Script=Han}]/gu) || [];
+    // 计算代码块时间
+    const codeBlocks = content.match(/```[\s\S]*?```/g) || [];
+    const codeTime = codeBlocks.reduce((total, block) => {
+      const lines = block.split("\n").length - 2; // 减去开始和结束的 ``` 行
+      return total + CODE_BLOCK_BASE_TIME + lines * CODE_LINE_TIME;
+    }, 0);
 
-    // 计算英文和中文部分的阅读时间
-    const englishReadingTime = words.length / 200; // 200 WPM
-    const chineseReadingTime = characters.length / 400; // 400 CPM
+    // 分别计算中英文
+    const contentWithoutCode = content.replace(/```[\s\S]*?```/g, "");
+    const chineseChars = contentWithoutCode.match(/[\u4e00-\u9fa5]/g)?.length || 0;
+    const englishWords = contentWithoutCode
+      .replace(/[\u4e00-\u9fa5]/g, "")
+      .trim()
+      .split(/\s+/).length;
 
-    // 总阅读时间，向上取整，单位为分钟
-    return Math.ceil(englishReadingTime + chineseReadingTime);
+    const chineseTime = chineseChars / CHINESE_CHARS_PER_MINUTE;
+    const englishTime = englishWords / WORDS_PER_MINUTE;
+
+    // 计算图片时间：轮播组件基础时间 + 每张图片时间
+    const imageTime = imagesCount > 0 ? CAROUSEL_BASE_TIME + imagesCount * IMAGE_TIME : 0;
+
+    return Math.ceil(chineseTime + englishTime + imageTime + codeTime);
   };
 
-  return `${calculateReadingTime(content)} 分钟`;
-}
+  // 获取图片总数（包括轮播图和内容中的图片）
+  const totalImages = (images?.length || 0) + (content.match(/!\[.*?\]\(.*?\)/g) || []).length;
+
+  return `${calculateReadingTime(content, totalImages)} 分钟`;
+};
