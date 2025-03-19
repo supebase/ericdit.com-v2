@@ -12,11 +12,20 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
+  experimental: {
+    payloadExtraction: true,
+  },
+
   app: {
     keepalive: true,
     buildAssetsDir: "static",
     head: {
+      htmlAttrs: {
+        lang: "zh-CN",
+      },
       viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+      link: [{ rel: "dns-prefetch", href: process.env.DIRECTUS_API_URL }],
+      meta: [{ name: "format-detection", content: "telephone=no" }],
     },
   },
 
@@ -29,11 +38,17 @@ export default defineNuxtConfig({
       minify: "terser",
       target: "esnext",
       cssCodeSplit: true,
+      chunkSizeWarningLimit: 1000,
+    },
+    optimizeDeps: {
+      include: ["vue", "vue-router", "@vueuse/core"],
     },
   },
 
   nitro: {
     compressPublicAssets: true,
+    sourceMap: false,
+    timing: false,
     esbuild: {
       options: {
         target: "esnext",
@@ -41,6 +56,17 @@ export default defineNuxtConfig({
     },
     prerender: {
       crawlLinks: true,
+    },
+  },
+
+  build: {
+    transpile: ["vue-router"],
+    analyze: false,
+  },
+
+  router: {
+    options: {
+      scrollBehaviorType: "smooth",
     },
   },
 
@@ -63,12 +89,6 @@ export default defineNuxtConfig({
       }
 
       vm.generateVersionFile();
-    },
-  },
-
-  router: {
-    options: {
-      scrollBehaviorType: "smooth",
     },
   },
 
