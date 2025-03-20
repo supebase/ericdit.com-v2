@@ -51,5 +51,5 @@ const { loaded: avatarLoaded, imageSrc: userAvatar } = useImageLoader(
 );
 
 const onlineStatusStore = useOnlineStatusStore();
-const isOnline = computed(() => onlineStatusStore.getUserOnlineStatus(props.user?.id || ""));
+const isOnline = computed(() => onlineStatusStore.getUserOnlineStatus(props.user.id));
 </script>

@@ -24,24 +24,21 @@ useLazyAsyncData(
 const onlineStatusStore = useOnlineStatusStore();
 const preventGesture = (event: Event) => event.preventDefault();
 
+// 初始化在线状态系统
 onMounted(async () => {
-  try {
-    // 初始化所有用户的在线状态
-    await onlineStatusStore.initializeOnlineStatuses();
-  } catch (error) {
-    console.error("Failed to initialize online statuses:", error);
-  }
-
+  await onlineStatusStore.initializeOnlineStatuses();
   document.addEventListener("gesturestart", preventGesture);
 });
 
+// 确保在组件卸载时清理
 onBeforeUnmount(() => {
-  document.removeEventListener("gesturestart", preventGesture);
+  onlineStatusStore.stopMonitoring();
 
-  // 确保在组件卸载前清理
+  const authStore = useAuthStore();
   if (authStore.user?.id) {
     onlineStatusStore.handleLogout(authStore.user.id);
   }
+  document.removeEventListener("gesturestart", preventGesture);
 });
 
 useHead({

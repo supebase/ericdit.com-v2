@@ -2,6 +2,7 @@ import type { DirectusUser } from "@directus/sdk";
 
 export interface User extends DirectusUser {
   online?: boolean;
+  last_active?: string | null;
 }
 
 /** 作者信息接口 */

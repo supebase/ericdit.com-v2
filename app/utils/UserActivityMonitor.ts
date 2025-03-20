@@ -1,4 +1,11 @@
-const ACTIVITY_EVENTS = ["mousemove", "keydown", "scroll"] as const;
+const ACTIVITY_EVENTS = [
+  "mousemove",
+  "keydown",
+  "scroll",
+  "click",
+  "touchstart",
+  "visibilitychange",
+] as const;
 
 interface ActivityMonitorOptions {
   timeout?: number;
@@ -14,7 +21,7 @@ export class ActivityMonitor {
 
   constructor(onStatusChange: (status: boolean) => void, options: ActivityMonitorOptions = {}) {
     this.onStatusChange = onStatusChange;
-    this.timeout = options.timeout || 180000; // 3 minutes
+    this.timeout = options.timeout || 180000; // 3分钟无活动则视为离线
     this.events = options.events || ACTIVITY_EVENTS;
   }
 
@@ -47,9 +54,12 @@ export class ActivityMonitor {
 
   public start(): () => void {
     this.events.forEach((event) => {
-      window.addEventListener(event, this.resetTimer);
+      if (event === "visibilitychange") {
+        document.addEventListener(event, this.handleVisibilityChange);
+      } else {
+        window.addEventListener(event, this.resetTimer);
+      }
     });
-    document.addEventListener("visibilitychange", this.handleVisibilityChange);
 
     this.resetTimer();
 
@@ -57,10 +67,16 @@ export class ActivityMonitor {
       if (this.timer) {
         clearTimeout(this.timer);
       }
+      if (this.debounceTimeout) {
+        clearTimeout(this.debounceTimeout);
+      }
       this.events.forEach((event) => {
-        window.removeEventListener(event, this.resetTimer);
+        if (event === "visibilitychange") {
+          document.removeEventListener(event, this.handleVisibilityChange);
+        } else {
+          window.removeEventListener(event, this.resetTimer);
+        }
       });
-      document.removeEventListener("visibilitychange", this.handleVisibilityChange);
     };
   }
 }

@@ -3,171 +3,182 @@ import type { User } from "~/types";
 export const useOnlineStatusStore = defineStore("onlineStatus", {
   state: () => ({
     usersOnlineStatus: {} as Record<string, boolean>,
-    activityCleanup: null as (() => void) | null,
-    activeUsers: new Set<string>(),
+    cleanup: null as (() => void) | null,
+    lastActiveTime: {} as Record<string, number>,
+    subscriptionCleanup: null as (() => void) | null,
   }),
 
   actions: {
     async setUserOnlineStatus(userId: string, status: boolean) {
+      if (!userId) return;
+
       const { $directus, $user } = useNuxtApp();
 
       try {
-        await $directus.request($user.updateUser(userId, { online: status } as User));
-        this.usersOnlineStatus[userId] = status;
+        await $directus.request(
+          $user.updateUser(userId, {
+            online: status,
+            last_active: new Date().toISOString(),
+          } as Partial<User>)
+        );
 
+        this.usersOnlineStatus[userId] = status;
         if (status) {
-          this.activeUsers.add(userId);
+          this.lastActiveTime[userId] = Date.now();
         } else {
-          this.activeUsers.delete(userId);
+          delete this.lastActiveTime[userId];
         }
       } catch (error) {
-        console.error("Failed to set user online status:", error);
+        console.error("Failed to update user online status:", error);
       }
     },
 
-    getUserOnlineStatus(userId: string) {
-      return this.usersOnlineStatus[userId] || false;
+    updateOnlineStatuses(updates: Record<string, boolean>) {
+      this.usersOnlineStatus = { ...this.usersOnlineStatus, ...updates };
     },
 
     startMonitoring(userId: string) {
-      if (this.activeUsers.has(userId)) return;
+      if (!userId) return;
+      this.stopMonitoring();
 
-      // 使用 debounce 处理状态更新
-      const debouncedSetStatus = useDebounceFn(async (status: boolean) => {
-        await this.setUserOnlineStatus(userId, status);
-      }, 3000);
-
-      // 活动监控
       const monitor = new ActivityMonitor(
         async (status) => {
-          await debouncedSetStatus(status);
+          await this.setUserOnlineStatus(userId, status);
         },
-        {
-          timeout: 180000, // 3分钟无活动则离线
-        }
+        { timeout: 180000 }
       );
 
-      // 处理页面可见性
-      if (useRuntimeConfig().app.client) {
-        let visibilityTimeout: NodeJS.Timeout;
+      this.cleanup = monitor.start();
 
-        const handleVisibilityChange = () => {
-          clearTimeout(visibilityTimeout);
+      // 添加浏览器关闭事件处理
+      const handleBeforeUnload = async () => {
+        await this.setUserOnlineStatus(userId, false);
+      };
 
-          if (document.visibilityState === "hidden") {
-            visibilityTimeout = setTimeout(() => {
-              debouncedSetStatus(false);
-            }, 30000); // 30秒后标记为离线
-          } else {
-            debouncedSetStatus(true);
-          }
-        };
+      window.addEventListener("beforeunload", handleBeforeUnload);
 
-        document.addEventListener("visibilitychange", handleVisibilityChange);
-        window.addEventListener("beforeunload", () => {
-          this.setUserOnlineStatus(userId, false);
-        });
-
-        // 清理函数
-        const cleanup = () => {
-          document.removeEventListener("visibilitychange", handleVisibilityChange);
-          clearTimeout(visibilityTimeout);
-        };
-
-        this.activityCleanup = cleanup;
-      }
-
-      // 启动活动监控
-      monitor.start();
+      // 更新清理函数，确保同时移除事件监听器
+      const originalCleanup = this.cleanup;
+      this.cleanup = () => {
+        originalCleanup();
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
     },
 
     stopMonitoring() {
-      if (this.activityCleanup) {
-        this.activityCleanup();
-        this.activityCleanup = null;
+      if (this.cleanup) {
+        this.cleanup();
+        this.cleanup = null;
       }
-    },
-
-    updateOnlineStatuses(statuses: Record<string, boolean>) {
-      this.usersOnlineStatus = { ...this.usersOnlineStatus, ...statuses };
+      if (this.subscriptionCleanup) {
+        this.subscriptionCleanup();
+        this.subscriptionCleanup = null;
+      }
     },
 
     async initializeOnlineStatuses() {
       const { $directus, $user, $realtimeClient } = useNuxtApp();
 
       try {
-        // 获取初始状态
         const users = await $directus.request(
           $user.readUsers({
-            fields: ["id", "online"],
+            fields: ["id", "online", "last_active"],
             filter: {
               status: { _eq: "active" },
             },
           })
         );
 
+        const now = Date.now();
         const statuses = (users as User[]).reduce((acc: Record<string, boolean>, user: User) => {
-          acc[user.id] = user.online ?? false;
+          const lastActive = user.last_active ? new Date(user.last_active).getTime() : 0;
+          acc[user.id] = Boolean(user.online && now - lastActive < 180000);
           return acc;
         }, {});
 
         this.updateOnlineStatuses(statuses);
 
-        // 订阅实时更新
-        $realtimeClient
-          .subscribe("directus_users", {
-            query: {
-              fields: ["id", "online"],
-              filter: {
-                status: { _eq: "active" },
-              },
+        const { subscription } = await $realtimeClient.subscribe("directus_users", {
+          query: {
+            fields: ["id", "online", "last_active"],
+            filter: {
+              status: { _eq: "active" },
             },
-          })
-          .then(({ subscription }) => {
-            (async () => {
-              try {
-                for await (const item of subscription) {
-                  if ("data" in item && item.data) {
-                    switch (item.event) {
-                      case "create":
-                      case "update":
-                        if (!Array.isArray(item.data)) {
-                          this.updateOnlineStatuses({
-                            [(item.data as { id: string; online?: boolean }).id]:
-                              (item.data as { id: string; online?: boolean }).online ?? false,
-                          });
-                        } else if (item.data.length > 0) {
-                          const updates = item.data.reduce(
-                            (acc: Record<string, boolean>, user: any) => {
-                              acc[user.id] = user.online ?? false;
-                              return acc;
-                            },
-                            {}
-                          );
-                          this.updateOnlineStatuses(updates);
-                        }
-                        break;
-                      case "delete":
-                        if (!Array.isArray(item.data)) {
-                          this.updateOnlineStatuses({
-                            [(item.data as { id: string }).id]: false,
-                          });
-                        }
-                        break;
+          },
+        });
+
+        let isSubscriptionActive = true;
+        this.subscriptionCleanup = () => {
+          isSubscriptionActive = false;
+          subscription.return?.();
+        };
+
+        (async () => {
+          try {
+            for await (const item of subscription) {
+              if (!isSubscriptionActive) break;
+
+              if ("data" in item && item.data) {
+                switch (item.event) {
+                  case "create":
+                  case "update":
+                    if (Array.isArray(item.data)) {
+                      const updates = item.data.reduce(
+                        (acc: Record<string, boolean>, user: Record<string, any>) => {
+                          const lastActive = user.last_active
+                            ? new Date(user.last_active).getTime()
+                            : 0;
+                          const now = Date.now();
+                          acc[user.id] = Boolean(user.online && now - lastActive < 180000);
+                          return acc;
+                        },
+                        {}
+                      );
+                      this.updateOnlineStatuses(updates);
+                    } else {
+                      const userData = item.data as User;
+                      const lastActive = userData.last_active
+                        ? new Date(userData.last_active).getTime()
+                        : 0;
+                      const now = Date.now();
+                      this.updateOnlineStatuses({
+                        [userData.id]: Boolean(userData.online && now - lastActive < 180000),
+                      });
                     }
-                  }
+                    break;
+
+                  case "delete":
+                    if (Array.isArray(item.data)) {
+                      const updates = item.data.reduce(
+                        (acc: Record<string, boolean>, user: any) => {
+                          acc[user.id] = false;
+                          return acc;
+                        },
+                        {}
+                      );
+                      this.updateOnlineStatuses(updates);
+                    } else {
+                      const userId = (item.data as { id: string }).id;
+                      this.updateOnlineStatuses({ [userId]: false });
+                    }
+                    break;
                 }
-              } catch (error) {
-                console.error("Error in subscription stream:", error);
               }
-            })();
-          })
-          .catch((error) => {
-            console.error("Failed to subscribe to online status:", error);
-          });
+            }
+          } catch (error) {
+            console.error("Error in subscription stream:", error);
+            if (isSubscriptionActive) {
+              await this.initializeOnlineStatuses();
+            }
+          }
+        })();
       } catch (error) {
         console.error("Failed to initialize online statuses:", error);
       }
+    },
+
+    getUserOnlineStatus(userId: string): boolean {
+      return Boolean(userId && this.usersOnlineStatus[userId]);
     },
 
     async handleLogout(userId: string) {
@@ -176,12 +187,11 @@ export const useOnlineStatusStore = defineStore("onlineStatus", {
       await this.setUserOnlineStatus(userId, false);
       this.stopMonitoring();
       this.usersOnlineStatus = {};
-      this.activeUsers.clear();
+      this.lastActiveTime = {};
     },
   },
 
   getters: {
-    onlineUsersCount: (state) =>
-      Object.values(state.usersOnlineStatus).filter((status) => status).length,
+    onlineUsersCount: (state) => Object.values(state.usersOnlineStatus).filter(Boolean).length,
   },
 });

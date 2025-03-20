@@ -15,7 +15,7 @@ export const useAuthStore = defineStore("auth", {
       try {
         const user = (await $authClient.request(
           $user.readMe({
-            fields: ["id", "email", "first_name", "avatar", "location"],
+            fields: ["id", "email", "first_name", "avatar", "location", "online", "last_active"],
           })
         )) as User;
         this.setUserData(user);
@@ -26,20 +26,19 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    setUserData(user: User) {
+    async setUserData(user: User) {
       this.user = user;
       this.isLoggedIn = true;
 
       const onlineStatusStore = useOnlineStatusStore();
-      onlineStatusStore.setUserOnlineStatus(user.id, true);
+      await onlineStatusStore.setUserOnlineStatus(user.id, true);
       onlineStatusStore.startMonitoring(user.id);
     },
 
-    clearUserData() {
+    async clearUserData() {
       if (this.user) {
         const onlineStatusStore = useOnlineStatusStore();
-        onlineStatusStore.setUserOnlineStatus(this.user.id, false);
-        onlineStatusStore.stopMonitoring();
+        await onlineStatusStore.handleLogout(this.user.id);
       }
       this.user = null;
       this.isLoggedIn = false;

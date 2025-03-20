@@ -36,7 +36,9 @@ export function useAuth() {
         const userLocation = location;
 
         const user = (await $authClient.request(
-          $user.readMe({ fields: ["id", "email", "first_name", "avatar", "location"] })
+          $user.readMe({
+            fields: ["id", "email", "first_name", "avatar", "location", "online", "last_active"],
+          })
         )) as User;
 
         user.location = userLocation;
