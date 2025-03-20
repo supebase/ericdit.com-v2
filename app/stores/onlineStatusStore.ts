@@ -63,14 +63,29 @@ export const useOnlineStatusStore = defineStore("onlineStatus", {
           }
         };
 
+        // 处理页面关闭事件
+        const handlePageHide = () => {
+          const { $directus } = useNuxtApp();
+          const endpoint = $directus.url + "/users/" + userId;
+
+          navigator.sendBeacon(endpoint, JSON.stringify({ online: false }));
+          this.usersOnlineStatus[userId] = false;
+          this.activeUsers.delete(userId);
+        };
+
         document.addEventListener("visibilitychange", handleVisibilityChange);
         window.addEventListener("beforeunload", () => {
           this.setUserOnlineStatus(userId, false);
         });
+        window.addEventListener("pagehide", handlePageHide);
 
         // 清理函数
         const cleanup = () => {
           document.removeEventListener("visibilitychange", handleVisibilityChange);
+          window.removeEventListener("pagehide", handlePageHide);
+          window.removeEventListener("beforeunload", () => {
+            this.setUserOnlineStatus(userId, false);
+          });
           clearTimeout(visibilityTimeout);
         };
 
