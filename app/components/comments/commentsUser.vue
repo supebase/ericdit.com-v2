@@ -52,16 +52,4 @@ const { loaded: avatarLoaded, imageSrc: userAvatar } = useImageLoader(
 
 const onlineStatusStore = useOnlineStatusStore();
 const isOnline = computed(() => onlineStatusStore.getUserOnlineStatus(props.user?.id || ""));
-
-onMounted(() => {
-  if (props.user?.id) {
-    onlineStatusStore.startMonitoring(props.user.id);
-  }
-});
-
-onBeforeUnmount(() => {
-  if (props.user?.id) {
-    onlineStatusStore.stopMonitoring();
-  }
-});
 </script>
