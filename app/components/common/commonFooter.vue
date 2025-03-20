@@ -15,6 +15,8 @@
             :name="link.icon"
             class="size-5" />
         </NuxtLink>
+
+        <UserOnline />
       </div>
       <div class="uppercase space-x-2">
         <span>2001 - Present</span>

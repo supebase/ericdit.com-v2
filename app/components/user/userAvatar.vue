@@ -3,8 +3,8 @@
     <div class="w-16 h-16 rounded-full">
       <UAvatar
         :src="avatarUrl || ''"
-        :alt="authStore.user?.first_name"
-        class="ring-2 ring-neutral-300 dark:ring-neutral-700 w-16 h-16" />
+        :alt="authStore.user?.first_name.toLocaleUpperCase()"
+        class="ring-2 ring-neutral-300 text-2xl dark:ring-neutral-700 w-16 h-16" />
     </div>
 
     <div class="flex items-center space-x-5">

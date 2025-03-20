@@ -13,12 +13,14 @@
           class="absolute inset-0 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-full">
           <UIcon
             name="svg-spinners:90-ring-with-bg"
-            class="size-6 text-neutral-500" />
+            class="size-5 text-neutral-500" />
         </div>
         <div
           v-if="!authStore.user?.avatar"
           class="absolute inset-0 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-full">
-          {{ authStore.user?.first_name?.[0] || "?" }}
+          <UIcon
+            name="hugeicons:image-upload"
+            class="size-5 text-neutral-500" />
         </div>
       </template>
     </UAvatar>
