@@ -2,6 +2,7 @@ import {
   registerUser,
   updateUser,
   readMe,
+  readUser,
   readUsers,
   readItem,
   readItems,
@@ -27,6 +28,7 @@ export default defineNuxtPlugin(() => {
         registerUser,
         updateUser,
         readMe,
+        readUser,
         readUsers,
       },
 

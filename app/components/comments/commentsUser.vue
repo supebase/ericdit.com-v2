@@ -51,5 +51,12 @@ const { loaded: avatarLoaded, imageSrc: userAvatar } = useImageLoader(
 );
 
 const onlineStatusStore = useOnlineStatusStore();
-const isOnline = computed(() => onlineStatusStore.getUserOnlineStatus(props.user.id));
+const { isUserOnline } = useOnlineStatus();
+
+const isOnline = computed(() => isUserOnline(props.user.id));
+
+// 确保在线状态已初始化
+onMounted(async () => {
+  await onlineStatusStore.initializeOnlineStatus();
+});
 </script>

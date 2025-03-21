@@ -1,4 +1,4 @@
-import type { User } from "~/types";
+import type { User, UserUpdateFields } from "~/types";
 
 export function useAuth() {
   const { $authClient, $user } = useNuxtApp();
@@ -42,9 +42,22 @@ export function useAuth() {
         )) as User;
 
         user.location = userLocation;
-        await $authClient.request($user.updateUser(user.id, { location: userLocation }));
+
+        // 更新用户信息和在线状态
+        await $authClient.request(
+          $user.updateUser(user.id, {
+            location: userLocation,
+            online: true,
+            last_active: new Date().toISOString(),
+          } as UserUpdateFields)
+        );
 
         authStore.setUserData(user);
+
+        // 更新在线状态存储
+        const onlineStatusStore = useOnlineStatusStore();
+        await onlineStatusStore.handleLogin(user.id);
+
         loading.value = false;
 
         // 清空输入框

@@ -5,6 +5,11 @@ export interface User extends DirectusUser {
   last_active?: string | null;
 }
 
+export interface UserUpdateFields extends Partial<DirectusUser> {
+  online?: boolean;
+  last_active?: string | null;
+}
+
 /** 作者信息接口 */
 export interface Author {
   authors_id: {

@@ -31,8 +31,7 @@ export const useAuthStore = defineStore("auth", {
       this.isLoggedIn = true;
 
       const onlineStatusStore = useOnlineStatusStore();
-      await onlineStatusStore.setUserOnlineStatus(user.id, true);
-      onlineStatusStore.startMonitoring(user.id);
+      await onlineStatusStore.handleLogin(user.id);
     },
 
     async clearUserData() {
